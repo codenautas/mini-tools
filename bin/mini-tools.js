@@ -16,4 +16,4 @@ MiniTools.serveErr=function serveErr(req,res,next){
     }
 }
 
-modules.exports=MiniTools;
+module.exports=MiniTools;
