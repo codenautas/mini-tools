@@ -1,3 +1,5 @@
+"use strict";
+
 var MiniTools={};
 
 MiniTools.serveErr=function serveErr(req,res,next){
