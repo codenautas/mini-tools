@@ -43,4 +43,22 @@ describe('mini-tools', function(){
             expect(next.firstCall.args.length).to.be(0);
         });
     });
+    
+    describe("pre_eval",function(){
+        var preEval=MiniTools.preEval;
+        it("allow alphaless expresions", function(){
+            expect(preEval("12*45+8/(3/4!)")).to.be(true);
+        });
+        it("reject variables", function(){
+            expect(preEval("12*45+x+8/(3/4!)",{a:true},{f:true,g:true})).to.be(false);
+        });
+        it("reject functions", function(){
+            expect(preEval("12*45+fi(8)/(3/4!)",{a:true},{f:true,g:true})).to.be(false);
+            expect(preEval("12*45+fi ()/(3/4!)",{a:true},{f:true,g:true})).to.be(false);
+        });
+        it("accept variables and functions", function(){
+            expect(preEval("name+12*45+name+8/(3/4!)-x",{name:true, x:true},{f:true,g:true})).to.be(true);
+            expect(preEval("max(f(a))+12*45+a+8/(3/4!)-f(x)",{a:true, x:true},{f:true,max:true})).to.be(true);
+        });
+    });
 });
