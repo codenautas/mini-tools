@@ -19,21 +19,14 @@ MiniTools.serveErr=function serveErr(req,res,next){
 }
 
 MiniTools.preEval=function(expresion, vars, functions){
-    var matches=expresion.match(/\b[a-zA-Z_]+(?:\s*\()?/g);
-    console.log('expresion',expresion);
-    console.log('matches',matches,!matches);
-    if(!matches) return true;
-    for(var i=0; i<matches.length; i++){
-        var match=matches[i];
-        if(match.substr(-1)==='('){
-            console.log('function',match,match.substring(0,match.length-1).trim());
-            if(!functions[match.substring(0,match.length-1).trim()]) return false;
-        }else{
-            console.log('var',match,!vars[match]);
-            if(!vars[match]) return false;
+    var r=/\b([a-zA-Z_]+)(\s*\()?/;
+    var ok=true;
+    expresion.replace(r,function(_, name, isFun){
+        if(!(isFun?functions:vars)[name]){
+            ok=false; // may be throw Exception
         }
-    }
-    return true;
+    });
+    return ok; 
 }
 
 
