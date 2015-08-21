@@ -29,5 +29,37 @@ MiniTools.preEval=function(expresion, vars, functions){
     return ok; 
 }
 
+MiniTools.serveText = function serveText(htmlText,contentTypeText){
+    return function(req,res){
+        res.setHeader('Content-Type', 'text/'+(contentTypeText||'plain')+'; charset=utf-8');
+        var buf=new Buffer(htmlText);
+        res.setHeader('Content-Length', buf.length);
+        res.end(buf);
+    }
+}
+
+MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
+    var Promises = require('best-promise');
+    var stylus = require('stylus');
+    var fs = require('fs-promise');
+    return function(req,res,next){
+        var regExpExt=/\.css$/g;
+        if(anyFile && !regExpExt.test(req.path)){
+            return next();
+        }
+        Promises.start(function(){
+            var fileName=(pathToFile+'/'+(anyFile?req.path:'')).replace(regExpExt,'.styl');
+            return fs.readFile(fileName, {encoding: 'utf8'});
+        }).catch(function(err){
+            if(anyFile && err.code==='ENOENT'){
+                throw new Error('next');
+            }
+            throw err;
+        }).then(function(fileContent){
+            var htmlText=stylus.render(fileContent);
+            MiniTools.serveText(htmlText,'css')(req,res);
+        }).catch(MiniTools.serveErr(req,res,next));
+    }
+}
 
 module.exports=MiniTools;
