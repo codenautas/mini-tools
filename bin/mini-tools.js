@@ -55,7 +55,7 @@ MiniTools.serveTransforming = function serveTransforming(pathToFile, anyFile, ex
         regExpExtDetect=new RegExp('\.'+escapeRegExp(extOriginal)+'$','g');
         regExpExtReplace=regExpExtDetect;
     }else{
-        regExpExtDetect=/^([.]+\/)?[^\/\.]+$/g;
+        regExpExtDetect=/^(.*\/)?[^\/\.]+$/g;
         regExpExtReplace=/$/g;
     }
     return function(req,res,next){
