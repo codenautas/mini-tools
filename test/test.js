@@ -7,6 +7,7 @@
 
 var expect = require('expect.js');
 var sinon = require('sinon');
+var jade = require('jade');
 var stylus = require('stylus');
 var Promises = require('best-promise');
 var fs = require('fs-promise');
@@ -85,12 +86,12 @@ describe('mini-tools', function(){
         });
     });
     
-    describe("stylus", function(){
-        function testServe(req,any,fileNameToRead,done){
-            var ssAny=MiniTools.serveStylus('./fixtures',any);
+    describe("stylus and jade", function(){
+        function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, done){
+            var serveThis=MiniTools[serviceName]('./fixtures',any);
             var stub_readFile=sinon.stub(fs,"readFile");
             stub_readFile.returns(Promises.Promise.resolve("this css ok"));
-            var stub_render=sinon.stub(stylus, "render");
+            var stub_render=sinon.stub(renderizer, "render");
             stub_render.returns("this{css:ok}");
             var res={};
             var next={};
@@ -103,22 +104,26 @@ describe('mini-tools', function(){
                 stub_render.restore();
                 stub_serveText.restore();
                 expect(text).to.be("this{css:ok}");
-                expect(type).to.be("css");
+                expect(type).to.be(textType);
                 return function(req1, res1){
                     expect(req1).to.be(req);
                     expect(res1).to.be(res);
                     done();
                 };
             });
-            ssAny(req, res, next);
+            serveThis(req, res, next);
         }
-        it("serve founded file", function(done){
+        it("serve stylus founded file", function(done){
             var req={path:'one.css'};
-            testServe(req,true,'./fixtures/one.styl',done);
+            testServe(req, true, './fixtures/one.styl', "serveStylus", stylus, 'css', done);
+        });
+        it("serve jade founded file", function(done){
+            var req={path:'one'};
+            testServe(req, true, './fixtures/one.jade', "serveJade", jade, 'html', done);
         });
         it("serve specific file file", function(done){
             var req={path:'one.css'};
-            testServe(req,false,'./fixtures',done);
+            testServe(req, false, './fixtures', "serveStylus", stylus, 'css', done);
         });
         var ssAny=MiniTools.serveStylus('./fixtures',true);
         it("skip non css requests", function(done){

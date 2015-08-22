@@ -41,17 +41,29 @@ MiniTools.serveText = function serveText(htmlText,contentTypeText){
     };
 };
 
-MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
+function escapeRegExp(string){
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+MiniTools.serveTransforming = function serveTransforming(pathToFile, anyFile, extOriginal, extTarget, renderizer, textType){
     var Promises = require('best-promise');
-    var stylus = require('stylus');
     var fs = require('fs-promise');
+    var regExpExtDetect;
+    var regExpExtReplace;
+    if(extOriginal){
+        regExpExtDetect=new RegExp('\.'+escapeRegExp(extOriginal)+'$','g');
+        regExpExtReplace=regExpExtDetect;
+    }else{
+        regExpExtDetect=/^([.]+\/)?[^\/\.]+$/g;
+        regExpExtReplace=/$/g;
+    }
     return function(req,res,next){
-        var regExpExt=/\.css$/g;
-        if(anyFile && !regExpExt.test(req.path)){
+        if(anyFile && !regExpExtDetect.test(req.path)){
             return next();
         }
         Promises.start(function(){
-            var fileName=(pathToFile+(anyFile?'/'+req.path:'')).replace(regExpExt,'.styl');
+            var fileName=(pathToFile+(anyFile?'/'+req.path:'')).replace(regExpExtReplace, '.'+extTarget);
             return fs.readFile(fileName, {encoding: 'utf8'});
         }).catch(function(err){
             if(anyFile && err.code==='ENOENT'){
@@ -59,10 +71,21 @@ MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
             }
             throw err;
         }).then(function(fileContent){
-            var htmlText=stylus.render(fileContent);
-            MiniTools.serveText(htmlText,'css')(req,res);
+            var htmlText=renderizer.render(fileContent);
+            MiniTools.serveText(htmlText,textType)(req,res);
         }).catch(MiniTools.serveErr(req,res,next));
     };
+};
+
+MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
+    var stylus = require('stylus');
+    return MiniTools.serveTransforming(pathToFile, anyFile, 'css', 'styl', stylus, 'css');
+};
+
+
+MiniTools.serveJade = function serveJade(pathToFile,anyFile){
+    var jade = require('jade');
+    return MiniTools.serveTransforming(pathToFile, anyFile, '', 'jade', jade, 'html');
 };
 
 module.exports=MiniTools;
