@@ -9,7 +9,7 @@ algunas herramientas para express
 [!--lang:*-->
 
 <!-- cucardas -->
-![designing](https://img.shields.io/badge/stability-desgining-red.svg)
+![extending](https://img.shields.io/badge/stability-extending-orange.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![linux](https://img.shields.io/travis/codenautas/mini-tools/master.svg)](https://travis-ci.org/codenautas/mini-tools)
