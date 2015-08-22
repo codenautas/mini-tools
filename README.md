@@ -116,6 +116,111 @@ de otro modo envía un error 400 con el mensaje de error (parámetro de Error).
 
 [!--lang:en-->
 
+### serveJade(path, any)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/',MiniTools.serveJade('./static',true));
+
+app.use('/main',MiniTools.serveJade('./static/index.jade',false));
+```
+
+<!--lang:en-->
+
+Returns an express middleware to serve jade files. 
+If `any==true` it serve files adding .jade to req.path; and
+if there no jade file it call `next()`. 
+
+If `any==false` it serves that specific file. 
+
+**Note**: for use serveJade you must include jade in `package.json`
+
+<!--lang:es--]
+
+Retorna un middleware compatible con express que envía y compila archivos jade. 
+Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+
+Si `any==false` lo que se especifica es un archivo específico. 
+
+**Nota**: hay que agregar `"jade"` a `package.json`
+
+[!--lang:en-->
+
+### serveStylus(path, any)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/',MiniTools.serveStylus('./static',true));
+
+app.use('/site.css',MiniTools.serveStylus('./static/index.styl',false));
+```
+
+<!--lang:en-->
+
+Returns an express middleware to serve jade files. 
+If `any==true` it serve files adding .jade to req.path; and
+if there no jade file it call `next()`. 
+
+If `any==false` it serves that specific file. 
+
+**Note**: for use serveStylus you must include stylus in package.json
+
+<!--lang:es--]
+
+Retorna un middleware compatible con express que envía y compila archivos jade. 
+Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+
+Si `any==false` lo que se especifica es un archivo específico. 
+
+**Nota**: hay que agregar `"stylus"` a `package.json`
+
+[!--lang:en-->
+
+It is promise friendly
+
+<!--lang:es--]
+
+Está diseñado para utilizarse con promesas
+
+[!--lang:*-->
+
+```js
+app.use('/tools', function(req,res,next){
+  //...
+  .then(function(){
+    if(not_in_this_middleware){
+      throw new Error("next");
+    }
+    // ...
+  }).catch(serveErr(req,res,next)); 
+```
+
+<!--lang:en-->
+
+*catch* expects a function that receive an error. 
+*serveErr* returns that function. 
+
+When err is Error("next") *serveErr* calls next and does not send any result to de front-end; 
+otherwise it sends a 400 error with the message and stack. 
+
+<!--lang:es--]
+
+*catch* espera un función que recibe un error. 
+*serveErr* devuelve esa función. 
+
+Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje al cliente
+(porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
+de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
+
+
+[!--lang:en-->
+
 ## License
 
 <!--lang:es--]

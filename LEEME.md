@@ -88,6 +88,48 @@ de otro modo envía un error 400 con el mensaje de error (parámetro de Error).
 
 
 
+Retorna un middleware compatible con express que envía y compila archivos jade. 
+Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+
+Si `any==false` lo que se especifica es un archivo específico. 
+
+**Nota**: hay que agregar `"jade"` a `package.json`
+
+
+Retorna un middleware compatible con express que envía y compila archivos jade. 
+Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+
+Si `any==false` lo que se especifica es un archivo específico. 
+
+**Nota**: hay que agregar `"stylus"` a `package.json`
+
+
+Está diseñado para utilizarse con promesas
+
+
+```js
+app.use('/tools', function(req,res,next){
+  //...
+  .then(function(){
+    if(not_in_this_middleware){
+      throw new Error("next");
+    }
+    // ...
+  }).catch(serveErr(req,res,next)); 
+```
+
+
+*catch* espera un función que recibe un error. 
+*serveErr* devuelve esa función. 
+
+Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje al cliente
+(porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
+de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
+
+
+
 ## Licencia
 
 
