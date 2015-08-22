@@ -1,4 +1,9 @@
 "use strict";
+/*jshint eqnull:true */
+/*jshint globalstrict:true */
+/*jshint node:true */
+/* global describe */
+/* global it */
 
 var expect = require('expect.js');
 var sinon = require('sinon');
@@ -75,21 +80,14 @@ describe('mini-tools', function(){
                 expect(res.setHeader.secondCall.args).to.eql(['Content-Length', 9]);
                 expect(buf.toString()).to.be("¡normal!");
                 done();
-            }
+            };
             st(null, res);
         });
     });
     
     describe("stylus", function(){
-        var ssAny=MiniTools.serveStylus('./fixtures',true);
-        it("skip non css requests", function(done){
-            var req={path:'other.ext'};
-            var next=done;
-            var res=null;
-            ssAny(req, res, next);
-        });
-        it("serve founded file", function(done){
-            var req={path:'one.css'};
+        function testServe(req,any,fileNameToRead,done){
+            var ssAny=MiniTools.serveStylus('./fixtures',any);
             var stub_readFile=sinon.stub(fs,"readFile");
             stub_readFile.returns(Promises.Promise.resolve("this css ok"));
             var stub_render=sinon.stub(stylus, "render");
@@ -97,19 +95,82 @@ describe('mini-tools', function(){
             var res={};
             var next={};
             var stub_serveText=sinon.stub(MiniTools,"serveText",function(text, type){
-                expect(stub_readFile.firstCall.args).to.eql(['./fixtures/one.styl', { encoding: 'utf8' }]);
+                expect(stub_readFile.firstCall.args).to.eql([fileNameToRead, { encoding: 'utf8' }]);
                 expect(stub_readFile.callCount).to.be(1);
                 expect(stub_render.firstCall.args).to.eql(["this css ok"]);
                 expect(stub_render.callCount).to.be(1);
                 stub_readFile.restore();
                 stub_render.restore();
+                stub_serveText.restore();
                 expect(text).to.be("this{css:ok}");
                 expect(type).to.be("css");
                 return function(req1, res1){
                     expect(req1).to.be(req);
                     expect(res1).to.be(res);
                     done();
-                }
+                };
+            });
+            ssAny(req, res, next);
+        }
+        it("serve founded file", function(done){
+            var req={path:'one.css'};
+            testServe(req,true,'./fixtures/one.styl',done);
+        });
+        it("serve specific file file", function(done){
+            var req={path:'one.css'};
+            testServe(req,false,'./fixtures',done);
+        });
+        var ssAny=MiniTools.serveStylus('./fixtures',true);
+        it("skip non css requests", function(done){
+            var req={path:'other.ext'};
+            var next=done;
+            var res=null;
+            ssAny(req, res, next);
+        });
+        it("call next() if not found", function(done){
+            var req={path:'inexis.css'};
+            var stub_readFile=sinon.stub(fs,"readFile");
+            var ErrorENOENT = new Error("ENOENT: File not found");
+            ErrorENOENT.code = 'ENOENT';
+            stub_readFile.throws(ErrorENOENT);
+            var stub_render=sinon.stub(stylus, "render");
+            var res={};
+            var stub_serveText=sinon.stub(MiniTools,"serveText");
+            var next=function(){
+                expect(stub_readFile.callCount).to.be(1);
+                expect(stub_readFile.firstCall.args).to.eql(['./fixtures/inexis.styl', { encoding: 'utf8' }]);
+                expect(stub_render.callCount).to.be(0);
+                expect(stub_serveText.callCount).to.be(0);
+                stub_readFile.restore();
+                stub_render.restore();
+                stub_serveText.restore();
+                done();
+            };
+            ssAny(req, res, next);
+        });
+        it("serve Error if other Error ocurs", function(done){
+            var req={path:'with-bad-content.css'};
+            var stub_readFile=sinon.stub(fs,"readFile");
+            var ErrorOTHER = new Error("OTHER: Error");
+            ErrorOTHER.code = 'OTHER';
+            stub_readFile.throws(ErrorOTHER);
+            var stub_render=sinon.stub(stylus, "render");
+            var res={};
+            var next={};
+            var stub_serveText=sinon.stub(MiniTools,"serveText");
+            var stub_serveErr=sinon.stub(MiniTools,"serveErr",function(req1, res1, next1){
+                return function(err){
+                    expect(stub_readFile.firstCall.args).to.eql(['./fixtures/with-bad-content.styl', { encoding: 'utf8' }]);
+                    expect(stub_readFile.callCount).to.be(1);
+                    stub_readFile.restore();
+                    stub_render.restore();
+                    stub_serveText.restore();
+                    stub_serveErr.restore();
+                    expect(req1).to.be(req);
+                    expect(next1).to.be(next);
+                    expect(err).to.be(ErrorOTHER);
+                    done();
+                };
             });
             ssAny(req, res, next);
         });

@@ -1,6 +1,9 @@
 "use strict";
+/*jshint eqnull:true */
+/*jshint globalstrict:true */
+/*jshint node:true */
 
-var MiniTools={};
+var MiniTools = {};
 
 MiniTools.serveErr=function serveErr(req,res,next){
     return function(err){
@@ -15,8 +18,8 @@ MiniTools.serveErr=function serveErr(req,res,next){
             'Content-Type': 'text/plain; charset=utf-8'
         });
         res.end(text);
-    }
-}
+    };
+};
 
 MiniTools.preEval=function(expresion, vars, functions){
     var r=/\b([a-zA-Z_]+)(\s*\()?/;
@@ -27,7 +30,7 @@ MiniTools.preEval=function(expresion, vars, functions){
         }
     });
     return ok; 
-}
+};
 
 MiniTools.serveText = function serveText(htmlText,contentTypeText){
     return function(req,res){
@@ -35,8 +38,8 @@ MiniTools.serveText = function serveText(htmlText,contentTypeText){
         var buf=new Buffer(htmlText);
         res.setHeader('Content-Length', buf.length);
         res.end(buf);
-    }
-}
+    };
+};
 
 MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
     var Promises = require('best-promise');
@@ -48,7 +51,7 @@ MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
             return next();
         }
         Promises.start(function(){
-            var fileName=(pathToFile+'/'+(anyFile?req.path:'')).replace(regExpExt,'.styl');
+            var fileName=(pathToFile+(anyFile?'/'+req.path:'')).replace(regExpExt,'.styl');
             return fs.readFile(fileName, {encoding: 'utf8'});
         }).catch(function(err){
             if(anyFile && err.code==='ENOENT'){
@@ -59,7 +62,7 @@ MiniTools.serveStylus = function serveStylus(pathToFile,anyFile){
             var htmlText=stylus.render(fileContent);
             MiniTools.serveText(htmlText,'css')(req,res);
         }).catch(MiniTools.serveErr(req,res,next));
-    }
-}
+    };
+};
 
 module.exports=MiniTools;
