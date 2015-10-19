@@ -262,7 +262,7 @@ describe("mini-tools with fake server",function(){
                     return done(err);
                 }
                 agent.get('/simple')
-                    .expect('<h1 x>simple jade<p>for example</p></h1>')
+                    .expect('<h1>simple jade<p>for example</p></h1>')
                     .end(done);
             });
     });
