@@ -13,7 +13,7 @@ var Promises = require('best-promise');
 var fs = require('fs-promise');
 var MiniTools = require('..');
 
-describe('mini-tools', function(){
+describe('mini-tools with mocks', function(){
     describe('serveErr', function(){
         var server;
         it('should send ERR 400', function(){
@@ -166,6 +166,12 @@ describe('mini-tools', function(){
             var req={path:'/one'};
             testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', done);
         });
+        it("serve double jade founded file", function(done){
+            var req={path:'/one'};
+            testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', function(){
+                testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', done);
+            });
+        });
         it("serve specific file file", function(done){
             var req={path:'one.css'};
             testServe(req, false, 'thisFile', "serveStylus", stylus, 'css', 'thisFile', done);
@@ -226,3 +232,30 @@ describe('mini-tools', function(){
         });
     });
 });
+
+var request = require('supertest');
+
+describe("mini-tools with fake server",function(){
+    it("serve simple jade",function(done){
+        var server = createServer('test/fixtures/simple',false);
+        request(server)
+            .get('/any')
+            .expect('<h1>simple jade<p>for example</p></h1>')
+            .end(done);
+    });
+});
+
+var http = require('http');
+
+function createServer(dir, opts, fn) {
+
+  var _serve = MiniTools.serveJade(dir, opts);
+
+  return http.createServer(function (req, res) {
+    fn && fn(req, res);
+    _serve(req, res, function (err) {
+      res.statusCode = err ? (err.status || 500) : 404;
+      res.end(err ? err.stack : 'sorry!');
+    });
+  });
+}

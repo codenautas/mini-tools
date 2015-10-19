@@ -14,13 +14,14 @@
     "colors": "1.1.2",
     "expect.js": "^0.3.1",
     "fs-promise": "^0.3.1",
-    "istanbul": "~0.3.18",
+    "istanbul": "~0.4.0",
     "jade": "~1.11.0",
-    "mocha": "^2.2.5",
-    "sinon": "^1.16.1",
-    "stylus": "^0.52.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.1",
+    "stylus": "^0.52.4",
+    "supertest": "1.1.0",
     
-    "best-promise": "^0.2.3"
+    "best-promise": "^0.2.4"
   },
   "main": "bin/mini-tools.js",
   "engines": {
