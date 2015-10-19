@@ -242,10 +242,13 @@ describe("mini-tools with fake server",function(){
         agent
             .get('/any')
             .expect('<h1>simple jade<p>for example</p></h1>')
-            .end(function(){
+            .end(function(err){
+                if(err){
+                    return done(err);
+                }
                 agent.get('/any')
-                .expect('<h1>simple jade<p>for example</p></h1>')
-                .end(done);
+                    .expect('<h1>simple jade<p>for example</p></h1>')
+                    .end(done);
             });
     });
     it("serve simple jade double request with any=true",function(done){
@@ -254,25 +257,41 @@ describe("mini-tools with fake server",function(){
         agent
             .get('/simple')
             .expect('<h1>simple jade<p>for example</p></h1>')
-            .end(function(){
+            .end(function(err){
+                if(err){
+                    return done(err);
+                }
                 agent.get('/simple')
-                .expect('<h1>simple jade<p>for example</p></h1>')
-                .end(done);
+                    .expect('<h1 x>simple jade<p>for example</p></h1>')
+                    .end(done);
             });
     });
 });
 
-var http = require('http');
+// var http = require('http');
+var express = require('express');
 
 function createServer(dir, opts, fn) {
-
-  var _serve = MiniTools.serveJade(dir, opts);
-
-  return http.createServer(function (req, res) {
-    fn && fn(req, res);
-    _serve(req, res, function (err) {
-      res.statusCode = err ? (err.status || 500) : 404;
-      res.end(err ? err.stack : 'sorry!');
+    
+    var _serve = MiniTools.serveJade(dir, opts);
+    
+    var app = express();
+    
+    app.listen();
+    
+    app.use(_serve);
+    
+    /*
+    return http.createServer(function (req, res) {
+        console.log('REQ');
+        console.dir(req,{depth:0});
+        fn && fn(req, res);
+        _serve(req, res, function (err) {
+            res.statusCode = err ? (err.status || 500) : 404;
+            res.end(err ? err.stack : 'next!');
+        });
     });
-  });
+    */
+    
+    return app;
 }
