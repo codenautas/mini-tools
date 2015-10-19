@@ -236,12 +236,29 @@ describe('mini-tools with mocks', function(){
 var request = require('supertest');
 
 describe("mini-tools with fake server",function(){
-    it("serve simple jade",function(done){
+    it("serve simple jade double request with any=false",function(done){
         var server = createServer('test/fixtures/simple',false);
-        request(server)
+        var agent=request(server);
+        agent
             .get('/any')
             .expect('<h1>simple jade<p>for example</p></h1>')
-            .end(done);
+            .end(function(){
+                agent.get('/any')
+                .expect('<h1>simple jade<p>for example</p></h1>')
+                .end(done);
+            });
+    });
+    it("serve simple jade double request with any=true",function(done){
+        var server = createServer('test/fixtures',true);
+        var agent=request(server);
+        agent
+            .get('/simple')
+            .expect('<h1>simple jade<p>for example</p></h1>')
+            .end(function(){
+                agent.get('/simple')
+                .expect('<h1>simple jade<p>for example</p></h1>')
+                .end(done);
+            });
     });
 });
 

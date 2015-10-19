@@ -13,6 +13,7 @@
   "devDependencies": {
     "colors": "1.1.2",
     "expect.js": "^0.3.1",
+    "express": "4.13.3",
     "fs-promise": "^0.3.1",
     "istanbul": "~0.4.0",
     "jade": "~1.11.0",
@@ -23,7 +24,7 @@
     
     "best-promise": "^0.2.4"
   },
-  "main": "bin/mini-tools.js",
+  "main": "lib/mini-tools.js",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -31,7 +32,7 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
-    "start": "node examples/server/server.js"
+    "start": "node example/server.js"
   },
   "jshintConfig": {
     "asi": false,
