@@ -1,20 +1,11 @@
-<!-- multilang from README.md
-
-
-
-
-NO MODIFIQUE ESTE ARCHIVO. FUE GENERADO AUTOMÁTICAMENTE POR multilang.js
-
-
-
-
--->
+<!--multilang v0 es:LEEME.md en:README.md -->
 # mini-tools
+<!--lang:es-->
+algunas herramientas para express
+<!--lang:en--]
 mini tools for express and others
 
-
-algunas herramientas para express
-
+[!--lang:*-->
 
 <!-- cucardas -->
 ![extending](https://img.shields.io/badge/stability-extending-orange.svg)
@@ -30,28 +21,45 @@ algunas herramientas para express
 
 idioma: ![castellano](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-es.png)
 también disponible en:
-[![inglés](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)](README.md)
+[![Inglés](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)](README.md)
 
+<!--lang:es-->
 ## Instalación
-
+<!--lang:en--]
+## Install
+[!--lang:*-->
 
 ```sh
 $ npm install mini-tools
 ```
 
+<!--lang:es-->
 
 ## Objetivo principal
 
 Tener a mano algunas herramientas pequeñas para express
 
+<!--lang:en--]
+
+## Main goal
+
+Have some mini tools for express and others
+
+[!--lang:*-->
 
 ## API
 
 ### serveErr(req, res [, next])
 
+<!--lang:es-->
 
 Retorna una función que envía un mensaje de error al cliente
 
+<!--lang:en--]
+
+Returns a function that sends a error message to de front-end. 
+
+[!--lang:*-->
 
 ```js
 app.post('/insert' , function(req,res){
@@ -63,9 +71,15 @@ app.post('/insert' , function(req,res){
   //...
 ```
 
+<!--lang:es-->
 
 Está diseñado para utilizarse con promesas
 
+<!--lang:en--]
+
+It is promise friendly
+
+[!--lang:*-->
 
 ```js
 app.use('/tools', function(req,res,next){
@@ -78,6 +92,7 @@ app.use('/tools', function(req,res,next){
   }).catch(serveErr(req,res,next)); 
 ```
 
+<!--lang:es-->
 
 *catch* espera un función que recibe un error. 
 *serveErr* devuelve esa función. 
@@ -86,7 +101,28 @@ Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje 
 (porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
 de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
 
+<!--lang:en--]
 
+*catch* expects a function that receive an error. 
+*serveErr* returns that function. 
+
+When err is Error("next") *serveErr* calls next and does not send any result to de front-end; 
+otherwise it sends a 400 error with the message and stack. 
+
+[!--lang:*-->
+
+### serveJade(path, any)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/',MiniTools.serveJade('./static',true));
+
+app.use('/main',MiniTools.serveJade('./static/index.jade',false));
+```
+
+<!--lang:es-->
 
 Retorna un middleware compatible con express que envía y compila archivos jade. 
 Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
@@ -96,6 +132,30 @@ Si `any==false` lo que se especifica es un archivo específico.
 
 **Nota**: hay que agregar `"jade"` a `package.json`
 
+<!--lang:en--]
+
+Returns an express middleware to serve jade files. 
+If `any==true` it serve files adding .jade to req.path; and
+if there no jade file it call `next()`. 
+
+If `any==false` it serves that specific file. 
+
+**Note**: for use serveJade you must include jade in `package.json`
+
+[!--lang:*-->
+
+### serveStylus(path, any)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/',MiniTools.serveStylus('./static',true));
+
+app.use('/site.css',MiniTools.serveStylus('./static/index.styl',false));
+```
+
+<!--lang:es-->
 
 Retorna un middleware compatible con express que envía y compila archivos jade. 
 Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
@@ -105,9 +165,25 @@ Si `any==false` lo que se especifica es un archivo específico.
 
 **Nota**: hay que agregar `"stylus"` a `package.json`
 
+<!--lang:en--]
+
+Returns an express middleware to serve jade files. 
+If `any==true` it serve files adding .jade to req.path; and
+if there no jade file it call `next()`. 
+
+If `any==false` it serves that specific file. 
+
+**Note**: for use serveStylus you must include stylus in package.json
+
+<!--lang:es-->
 
 Está diseñado para utilizarse con promesas
 
+<!--lang:en--]
+
+It is promise friendly
+
+[!--lang:*-->
 
 ```js
 app.use('/tools', function(req,res,next){
@@ -120,6 +196,7 @@ app.use('/tools', function(req,res,next){
   }).catch(serveErr(req,res,next)); 
 ```
 
+<!--lang:es-->
 
 *catch* espera un función que recibe un error. 
 *serveErr* devuelve esa función. 
@@ -128,11 +205,24 @@ Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje 
 (porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
 de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
 
+<!--lang:en--]
 
+*catch* expects a function that receive an error. 
+*serveErr* returns that function. 
+
+When err is Error("next") *serveErr* calls next and does not send any result to de front-end; 
+otherwise it sends a 400 error with the message and stack. 
+
+
+<!--lang:es-->
 
 ## Licencia
 
+<!--lang:en--]
+
+## License
+
+[!--lang:*-->
 
 [MIT](LICENSE)
 
-.............................
