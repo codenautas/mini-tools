@@ -111,29 +111,6 @@ If `any==false` it serves that specific file.
 **Note**: for use serveStylus you must include stylus in package.json
 
 
-It is promise friendly
-
-
-```js
-app.use('/tools', function(req,res,next){
-  //...
-  .then(function(){
-    if(not_in_this_middleware){
-      throw new Error("next");
-    }
-    // ...
-  }).catch(serveErr(req,res,next));
-```
-
-
-*catch* expects a function that receive an error.
-*serveErr* returns that function.
-
-When err is Error("next") *serveErr* calls next and does not send any result to de front-end;
-otherwise it sends a 400 error with the message and stack.
-
-
-
 ## License
 
 

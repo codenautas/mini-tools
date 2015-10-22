@@ -2,6 +2,7 @@
 # mini-tools
 <!--lang:es-->
 algunas herramientas para express
+
 <!--lang:en--]
 mini tools for express and others
 
@@ -174,45 +175,6 @@ if there no jade file it call `next()`.
 If `any==false` it serves that specific file. 
 
 **Note**: for use serveStylus you must include stylus in package.json
-
-<!--lang:es-->
-
-Está diseñado para utilizarse con promesas
-
-<!--lang:en--]
-
-It is promise friendly
-
-[!--lang:*-->
-
-```js
-app.use('/tools', function(req,res,next){
-  //...
-  .then(function(){
-    if(not_in_this_middleware){
-      throw new Error("next");
-    }
-    // ...
-  }).catch(serveErr(req,res,next)); 
-```
-
-<!--lang:es-->
-
-*catch* espera un función que recibe un error. 
-*serveErr* devuelve esa función. 
-
-Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje al cliente
-(porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
-de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
-
-<!--lang:en--]
-
-*catch* expects a function that receive an error. 
-*serveErr* returns that function. 
-
-When err is Error("next") *serveErr* calls next and does not send any result to de front-end; 
-otherwise it sends a 400 error with the message and stack. 
-
 
 <!--lang:es-->
 
