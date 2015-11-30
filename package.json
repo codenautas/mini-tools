@@ -39,14 +39,6 @@
     "curly": true,
     "forin": true
   },
-  "eslintConfig": {
-    "env": {
-      "node": true
-    },
-    "rules": {
-      "strict": 0
-    }
-  },
   "qa-control": {
     "package-version": "0.0.1",
     "run-in": "server",
