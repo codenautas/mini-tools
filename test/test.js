@@ -13,6 +13,7 @@ var stylus = require('stylus');
 var Promises = require('best-promise');
 var fs = require('fs-promise');
 var MiniTools = require('..');
+var bestGlobals = require('best-globals');
 
 describe('mini-tools with mocks', function(){
     describe('serveErr', function(){
@@ -269,30 +270,58 @@ describe("mini-tools with fake server",function(){
     });
 });
 
-// var http = require('http');
+describe("fs tools", function(){
+    it("must read multiple config", function(done){
+        var ok="ok_content_"+Math.random();
+        var bg=sinon.stub(bestGlobals, "changing").returns(ok);
+        MiniTools.readConfig([
+            'test/fixtures/read-config1.json',
+            'test/fixtures/read-config2.yaml',
+            'test/fixtures/read-config3',
+            'test/fixtures/read-config4',
+            { config5:5 },
+            'test/fixtures/read-config6',
+        ]).then(function(cfg){
+            expect(cfg).to.eql(ok);
+            expect(bestGlobals.changing.callCount).to.be(1);
+            expect(bestGlobals.changing.firstCall.args).to.eql([
+                {config1:1},
+                {config2:2},
+                {config3:3},
+                {config4:4},
+                {config5:5},
+                {config6:6},
+            ]);
+        }).then(done,done);
+    });
+    it("must control if file not found", function(done){
+        MiniTools.readConfig([
+            'test/fixtures/read-config0',
+        ]).then(function(){
+            done(new Error("must fail"));
+        },function(err){
+            expect(err.message).to.match(/Config file does not found/);
+            done();
+        }).catch(done);
+    });
+    it("must control parameter types", function(done){
+        MiniTools.readConfig([
+            [],
+        ]).then(function(){
+            done(new Error("must fail"));
+        },function(err){
+            expect(err.message).to.match(/readConfig must receive string filename or config object/);
+            done();
+        }).catch(done);
+    });
+});
+
 var express = require('express');
 
 function createServer(dir, opts, fn) {
-    
     var _serve = MiniTools.serveJade(dir, opts);
-    
     var app = express();
-    
     app.listen();
-    
     app.use(_serve);
-    
-    /*
-    return http.createServer(function (req, res) {
-        console.log('REQ');
-        console.dir(req,{depth:0});
-        fn && fn(req, res);
-        _serve(req, res, function (err) {
-            res.statusCode = err ? (err.status || 500) : 404;
-            res.end(err ? err.stack : 'next!');
-        });
-    });
-    */
-    
     return app;
 }
