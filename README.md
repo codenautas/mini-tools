@@ -82,8 +82,8 @@ app.use('/main',MiniTools.serveJade('./static/index.jade',false));
 
 
 Returns an express middleware to serve jade files.
-If `any==true` it serve files adding .jade to req.path; and
-if there no jade file it call `next()`.
+If `any==true` it serves files adding .jade to req.path; and
+if there is no jade file it call `next()`.
 
 If `any==false` it serves that specific file.
 
@@ -103,8 +103,8 @@ app.use('/site.css',MiniTools.serveStylus('./static/index.styl',false));
 
 
 Returns an express middleware to serve jade files.
-If `any==true` it serve files adding .jade to req.path; and
-if there no jade file it call `next()`.
+If `any==true` it serves files adding .jade to req.path; and
+if there is no jade file it call `next()`.
 
 If `any==false` it serves that specific file.
 
