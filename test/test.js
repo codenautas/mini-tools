@@ -273,24 +273,32 @@ describe("mini-tools with fake server",function(){
 describe("fs tools", function(){
     it("must read multiple config", function(done){
         var ok="ok_content_"+Math.random();
-        var bg=sinon.stub(bestGlobals, "changing").returns(ok);
+        var bg=sinon.spy(bestGlobals, "changing");
         MiniTools.readConfig([
             'test/fixtures/read-config1.json',
             'test/fixtures/read-config2.yaml',
             'test/fixtures/read-config3',
             'test/fixtures/read-config4',
-            { config5:5 },
+            { config2:2.5, config5:5, config6:6.5 },
             'test/fixtures/read-config6',
         ]).then(function(cfg){
-            expect(cfg).to.eql(ok);
-            expect(bestGlobals.changing.callCount).to.be(1);
-            expect(bestGlobals.changing.firstCall.args).to.eql([
-                {config1:1},
-                {config2:2},
-                {config3:3},
-                {config4:4},
-                {config5:5},
-                {config6:6},
+            expect(cfg).to.eql({
+                config1:1,
+                config2:2.5,
+                config3:3,
+                config4:4,
+                config5:5,
+                config6:6,
+            });
+            expect(bestGlobals.changing.callCount).to.be(6);
+            expect(bestGlobals.changing.args[bestGlobals.changing.args.length-1]).to.eql([      
+                { config1: 1,
+                  config2: 2.5,
+                  config3: 3,
+                  config4: 4,
+                  config5: 5,
+                  config6: 6.5 },
+                { config6: 6 } 
             ]);
         }).then(done,done);
     });
