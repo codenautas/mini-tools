@@ -43,7 +43,6 @@ describe('mini-tools with mocks', function(){
                 'Content-Type': 'text/plain; charset=utf-8'
             }]);
             expect(res.writeHead.callCount).to.be(1);
-            console.log("restore console.log ok!");
         });
         it('should not send headers if there where sent before', function(){
             var res={};
@@ -61,7 +60,6 @@ describe('mini-tools with mocks', function(){
             expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
             expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is a message\n\s*at/);
             expect(spyed_console_log.callCount).to.be(2);
-            console.log("restore console.log ok!");
         });
         it('should by pass with next', function(){
             var next=sinon.spy();
@@ -96,10 +94,8 @@ describe('mini-tools with mocks', function(){
                 'Content-Type': 'text/plain; charset=utf-8'
             }]);
             expect(res.writeHead.callCount).to.be(1);
-            console.log("restore console.log ok!");
         });
     });
-    
     describe("pre_eval",function(){
         var preEval=MiniTools.preEval;
         it("allow alphaless expresions", function(){
@@ -132,19 +128,26 @@ describe('mini-tools with mocks', function(){
             st(null, res);
         });
     });
-    
     describe("stylus and jade", function(){
         function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done){
-            var serveThis=MiniTools[serviceName](baseDir,any);
             var stub_readFile=sinon.stub(fs,"readFile");
             stub_readFile.returns(Promises.Promise.resolve("this css ok"));
-            var stub_render=sinon.stub(renderizer, "render");
-            stub_render.returns("this{css:ok}");
+            if(renderizer===JSON){
+                var stub_render=sinon.stub(renderizer, "stringify");
+                stub_render.returns("this{css:ok}");
+            }else{
+                var stub_render=sinon.stub(renderizer, "render");
+                stub_render.returns("this{css:ok}");
+            }
             var res={};
             var next={};
             var stub_serveText=sinon.stub(MiniTools,"serveText",function(text, type){
-                expect(stub_readFile.firstCall.args).to.eql([fileNameToRead, { encoding: 'utf8' }]);
-                expect(stub_readFile.callCount).to.be(1);
+                if(fileNameToRead){
+                    expect(stub_readFile.firstCall.args).to.eql([fileNameToRead, { encoding: 'utf8' }]);
+                    expect(stub_readFile.callCount).to.be(1);
+                }else{
+                    expect(stub_readFile.callCount).to.be(0);
+                }
                 expect(stub_render.firstCall.args).to.eql(["this css ok"]);
                 expect(stub_render.callCount).to.be(1);
                 stub_readFile.restore();
@@ -158,6 +161,7 @@ describe('mini-tools with mocks', function(){
                     done();
                 };
             });
+            var serveThis=MiniTools[serviceName](baseDir,any);
             serveThis(req, res, next);
         }
         it("serve stylus founded file", function(done){
@@ -167,6 +171,10 @@ describe('mini-tools with mocks', function(){
         it("serve jade founded file", function(done){
             var req={path:'/one'};
             testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', done);
+        });
+        it("serve json objects", function(done){
+            var req={path:'/one-object'};
+            testServe(req, null, null, "serveJson", JSON, 'application/json', "this css ok", done);
         });
         it("serve double jade founded file", function(done){
             var req={path:'/one'};
