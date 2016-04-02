@@ -320,6 +320,14 @@ describe("fs tools", function(){
             done();
         }).catch(done);
     });
+    it("must ignore if file not found {whenNotExist:'ignore'}", function(done){
+        MiniTools.readConfig([
+            'test/fixtures/read-config1.json',
+            'test/fixtures/read-config0',
+        ], {whenNotExist:'ignore'}).then(function(cfg){
+            expect(cfg).to.eql({"config1": 1});
+        }).then(done,done);
+    });
     it("must control parameter types", function(done){
         MiniTools.readConfig([
             [],

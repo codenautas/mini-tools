@@ -176,6 +176,50 @@ If `any==false` it serves that specific file.
 
 **Note**: for use serveStylus you must include stylus in package.json
 
+[!--lang:*-->
+
+### readConfig(list, opts)
+
+```js
+MiniTools.readConfig(
+    [
+        {production: true},
+        'package.json',
+        'other-configs.yml',
+        'more-configs',
+    ],
+    {whenNotExist:'ignore'}
+).then(function(config){
+    console.log(config);
+});
+```
+
+<!--lang:es-->
+
+Lee la configuración de la lista empezando por el primer archivo 
+y agregando la configuración de los siguientes archivos 
+(usando [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options)). 
+
+Si el elemento de la lista es un nombre de archivo terminado en .json .yaml o .yml se lee y se parsea, 
+si no tiene extensión se busca uno con alguna de esas extensiones,
+si es un objeto plano se usa directamente.
+
+**opciones** 
+ * whenNotExist:'ignore'
+ * whenNotExist:'fail'
+
+<!--lang:en--]
+
+Reads the chain of configuration merging with [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options).
+
+If the list element is a fileName ending with .json .yaml o .yml, it reads and parse, 
+if doesn't have extension it search first, 
+if it is a plain object it uses directly.
+
+**options** 
+ * whenNotExist:'ignore'
+ * whenNotExist:'fail'
+
 <!--lang:es-->
 
 ## Licencia
