@@ -10,6 +10,7 @@ mini tools for express and others
 [![coverage](https://img.shields.io/coveralls/codenautas/mini-tools/master.svg)](https://coveralls.io/r/codenautas/mini-tools)
 [![climate](https://img.shields.io/codeclimate/github/codenautas/mini-tools.svg)](https://codeclimate.com/github/codenautas/mini-tools)
 [![dependencies](https://img.shields.io/david/codenautas/mini-tools.svg)](https://david-dm.org/codenautas/mini-tools)
+[![qa-control](http://codenautas.com/github/codenautas/mini-tools.svg)](http://codenautas.com/github/codenautas/mini-tools)
 
 
 language: ![English](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)
@@ -109,6 +110,34 @@ if there is no jade file it call `next()`.
 If `any==false` it serves that specific file.
 
 **Note**: for use serveStylus you must include stylus in package.json
+
+
+### readConfig(list, opts)
+
+```js
+MiniTools.readConfig(
+    [
+        {production: true},
+        'package.json',
+        'other-configs.yml',
+        'more-configs',
+    ],
+    {whenNotExist:'ignore'}
+).then(function(config){
+    console.log(config);
+});
+```
+
+
+Reads the chain of configuration merging with [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options).
+
+If the list element is a fileName ending with .json .yaml o .yml, it reads and parse,
+if doesn't have extension it search first,
+if it is a plain object it uses directly.
+
+**options**
+ * whenNotExist:'ignore'
+ * whenNotExist:'fail'
 
 
 ## License

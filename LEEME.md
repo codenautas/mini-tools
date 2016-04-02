@@ -17,6 +17,7 @@ mini tools for express and others
 [![coverage](https://img.shields.io/coveralls/codenautas/mini-tools/master.svg)](https://coveralls.io/r/codenautas/mini-tools)
 [![climate](https://img.shields.io/codeclimate/github/codenautas/mini-tools.svg)](https://codeclimate.com/github/codenautas/mini-tools)
 [![dependencies](https://img.shields.io/david/codenautas/mini-tools.svg)](https://david-dm.org/codenautas/mini-tools)
+[![qa-control](http://codenautas.com/github/codenautas/mini-tools.svg)](http://codenautas.com/github/codenautas/mini-tools)
 
 <!--multilang buttons-->
 
