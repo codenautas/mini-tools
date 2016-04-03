@@ -336,6 +336,16 @@ describe("fs tools", function(){
             expect(cfg).to.eql({"config1": 1});
         }).then(done,done);
     });
+    it("must not ignore other errors if file not found {whenNotExist:'ignore'}", function(done){
+        MiniTools.readConfig([
+            'test/fixtures/read-invalid',
+        ], {whenNotExist:'ignore'}).then(function(){
+            done(new Error("must fail because of invalid content"));
+        },function(err){
+            expect(err.message).to.match(/Unexpected token/);
+            done();
+        }).catch(done);
+    });
     it("must control parameter types", function(done){
         MiniTools.readConfig([
             [],
