@@ -10,7 +10,7 @@
     "name": "Emilio Platzer", "email": "emilioplatzer@gmail.com"
   }],
   "dependencies": {
-    "fs-extra": "~0.26.7",
+    "fs-extra": "~0.27.0",
     "fs-promise": "~0.5.0",
     "read-yaml-promise": "~1.0.2",
     
