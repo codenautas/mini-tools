@@ -12,7 +12,6 @@
   "dependencies": {
     "fs-extra": "~0.27.0",
     "fs-promise": "~0.5.0",
-    "jade": "~1.11.0",
     "read-yaml-promise": "~1.0.2",
     
     "best-globals": "~0.2.4",
@@ -24,6 +23,7 @@
     "express": "~4.13.4",
     "istanbul": "~0.4.2",
     "mocha": "~2.4.5",
+    "pug": "~2.0.0-alpha6",
     "sinon": "~1.17.3",
     "stylus": "~0.54.2",
     "supertest": "~1.2.0"

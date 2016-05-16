@@ -8,7 +8,7 @@
 
 var expect = require('expect.js');
 var sinon = require('sinon');
-var jade = require('jade');
+var pug = require('pug');
 var stylus = require('stylus');
 var Promises = require('best-promise');
 var fs = require('fs-promise');
@@ -170,7 +170,7 @@ describe('mini-tools with mocks', function(){
         });
         it("serve jade founded file", function(done){
             var req={path:'/one'};
-            testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', done);
+            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
         });
         it("serve json objects", function(done){
             var req={path:'/one-object'};
@@ -178,8 +178,8 @@ describe('mini-tools with mocks', function(){
         });
         it("serve double jade founded file", function(done){
             var req={path:'/one'};
-            testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', function(){
-                testServe(req, true, 'client//one.jade', "serveJade", jade, 'html', 'client', done);
+            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', function(){
+                testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
             });
         });
         it("serve specific file file", function(done){
