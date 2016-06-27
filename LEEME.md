@@ -179,6 +179,50 @@ If `any==false` it serves that specific file.
 
 [!--lang:*-->
 
+### serveText(anyText,contentTypeText)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/about',MiniTools.serveText('<h1>This app</h1>','html'));
+
+app.use('/is-up-service',MiniTools.serveText('Yes.'));
+```
+
+<!--lang:es-->
+
+Retorna un middleware compatible con express que envía un archivo de texto plano. 
+Opcionalmente se le puede indicar el "content type" (si no se le pasa una "/" se entiende que es text)
+
+<!--lang:en--]
+
+Returns an express middleware to serve pain text. 
+Optionaly you can pass "content type".
+
+[!--lang:*-->
+
+### serveJson(object)
+
+```js
+var express = require('express');
+var app = express();
+
+var config = {devel:false, title: "title"};
+
+app.use('/config',MiniTools.serveJson(config));
+```
+
+<!--lang:es-->
+
+Retorna un middleware compatible con express que envía un objeto en formato JSON
+
+<!--lang:en--]
+
+Returns an express middleware to serve an object in JSON format.
+
+[!--lang:*-->
+
 ### readConfig(list, opts)
 
 ```js

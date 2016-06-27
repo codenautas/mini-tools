@@ -276,6 +276,22 @@ describe("mini-tools with fake server",function(){
                     .end(done);
             });
     });
+    describe("serve-file", function(){
+        it("serve any file",function(done){
+            var fileName='test/fixtures/ok.png';
+            fs.readFile(fileName).then(function(fileContent){
+                var sf=MiniTools.serveFile(fileName);
+                var server = createServer('test/fixtures',true);
+                server.get('/ok1.png',sf);
+                var agent=request(server);
+                agent
+                .get('/ok1.png')
+                .expect('Content-Type','image/png')
+                .expect(fileContent)
+                .end(done);
+            }).catch(done);
+        });
+    });
 });
 
 describe("fs tools", function(){

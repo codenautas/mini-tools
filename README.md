@@ -112,6 +112,37 @@ If `any==false` it serves that specific file.
 **Note**: for use serveStylus you must include stylus in package.json
 
 
+### serveText(anyText,contentTypeText)
+
+```js
+var express = require('express');
+var app = express();
+
+app.use('/about',MiniTools.serveText('<h1>This app</h1>','html'));
+
+app.use('/is-up-service',MiniTools.serveText('Yes.'));
+```
+
+
+Returns an express middleware to serve pain text.
+Optionaly you can pass "content type".
+
+
+### serveJson(object)
+
+```js
+var express = require('express');
+var app = express();
+
+var config = {devel:false, title: "title"};
+
+app.use('/config',MiniTools.serveJson(config));
+```
+
+
+Returns an express middleware to serve an object in JSON format.
+
+
 ### readConfig(list, opts)
 
 ```js

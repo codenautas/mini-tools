@@ -13,17 +13,18 @@
     "fs-extra": "~0.30.0",
     "fs-promise": "~0.5.0",
     "read-yaml-promise": "~1.0.2",
+    "send": "~0.14.1",
     
-    "best-globals": "~0.4.5",
+    "best-globals": "~0.4.6",
     "best-promise": "~0.2.4"
   },
   "devDependencies": {
     "colors": "~1.1.2",
     "expect.js": "~0.3.1",
-    "express": "~4.13.4",
-    "istanbul": "~0.4.3",
+    "express": "~4.14.0",
+    "istanbul": "~0.4.4",
     "mocha": "~2.5.3",
-    "pug": "~2.0.0-alpha7",
+    "pug": "~2.0.0-beta3",
     "sinon": "~1.17.4",
     "stylus": "~0.54.5",
     "supertest": "~1.2.0"
