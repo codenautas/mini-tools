@@ -276,6 +276,23 @@ describe("mini-tools with fake server",function(){
                     .end(done);
             });
     });
+    it("serve jade with-var",function(done){
+        var server = createServer('test/fixtures',true);
+        server.get('/x',MiniTools.serveJade('test/fixtures/with-vars',{id:'id1', line1:'line'}));
+        var agent=request(server);
+        agent
+        .get('/x')
+        .expect('<p id="id1">line</p>')
+        .end(function(err){
+            if(err){
+                return done(err);
+            }
+            agent
+            .get('/x')
+            .expect('<p id="id1">line</p>')
+            .end(done);
+        });
+    });
     describe("serve-file", function(){
         it("serve any file",function(done){
             var fileName='test/fixtures/ok.png';
@@ -324,6 +341,7 @@ describe("fs tools", function(){
                   config6: 6.5 },
                 { config6: 6 } 
             ]);
+            bestGlobals.changing.restore();
         }).then(done,done);
     });
     it("must control if file not found", function(done){
