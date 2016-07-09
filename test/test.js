@@ -79,6 +79,7 @@ describe('mini-tools with mocks', function(){
             res.end=sinon.spy();
             res.writeHead=sinon.spy();
             var err=new Error("this is the message");
+            err.status=403;
             var spy_console_log=sinon.stub(console, "log");
             MiniTools.serveErr.sendStack=false;
             MiniTools.serveErr(null,res,null)(err);
@@ -92,7 +93,7 @@ describe('mini-tools with mocks', function(){
             expect(spyed_console_log.callCount).to.be(2);
             var length=res.writeHead.firstCall.args[1]['Content-Length'];
             expect(length).to.eql(res.end.firstCall.args[0].length);
-            expect(res.writeHead.firstCall.args).to.eql([400, {
+            expect(res.writeHead.firstCall.args).to.eql([403, {
                 'Content-Length': length,
                 'Content-Type': 'text/plain; charset=utf-8'
             }]);

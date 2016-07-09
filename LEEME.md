@@ -55,11 +55,19 @@ Have some mini tools for express and others
 
 <!--lang:es-->
 
-Retorna una función que envía un mensaje de error al cliente
+Retorna una función que envía un mensaje de error al cliente. 
+Si el objeto error tiene especificada la propiedad:
+
+  * code: es mostrada antes del mensaje. 
+  * status: es enviado como status (si no se envía 400)
 
 <!--lang:en--]
 
 Returns a function that sends a error message to de front-end. 
+If the error object has setted the property
+
+  * code: is displayed before the message
+  * status: is sended in the header (otherwise "400" is sended)
 
 [!--lang:*-->
 

@@ -35,6 +35,10 @@ Have some mini tools for express and others
 
 
 Returns a function that sends a error message to de front-end.
+If the error object has setted the property
+
+  * code: is displayed before the message
+  * status: is sended in the header (otherwise "400" is sended)
 
 
 ```js
