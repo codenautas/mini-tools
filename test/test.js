@@ -15,6 +15,8 @@ var fs = require('fs-promise');
 var MiniTools = require('..');
 var bestGlobals = require('best-globals');
 
+var jsYaml = require('js-yaml');
+
 describe('mini-tools with mocks', function(){
     describe('serveErr', function(){
         var server;
@@ -136,13 +138,11 @@ describe('mini-tools with mocks', function(){
         function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done){
             var stub_readFile=sinon.stub(fs,"readFile");
             stub_readFile.returns(Promises.Promise.resolve("this css ok"));
-            if(renderizer===JSON){
-                var stub_render=sinon.stub(renderizer, "stringify");
-                stub_render.returns("this{css:ok}");
-            }else{
-                var stub_render=sinon.stub(renderizer, "render");
-                stub_render.returns("this{css:ok}");
+            if(!renderizer.baseObject){
+                renderizer={baseObject:renderizer, methodName:"render"};
             }
+            var stub_render=sinon.stub(renderizer.baseObject, renderizer.methodName);
+            stub_render.returns("this{css:ok}");
             var res={};
             var next={};
             var stub_serveText=sinon.stub(MiniTools,"serveText",function(text, type){
@@ -178,7 +178,11 @@ describe('mini-tools with mocks', function(){
         });
         it("serve json objects", function(done){
             var req={path:'/one-object'};
-            testServe(req, null, null, "serveJson", JSON, 'application/json', "this css ok", done);
+            testServe(req, null, null, "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', "this css ok", done);
+        });
+        it("serve yaml objects", function(done){
+            var req={path:'/one-object'};
+            testServe(req, null, null, "serveYaml", {baseObject:jsYaml, methodName:"safeDump"}, 'application/x-yaml', "this css ok", done);
         });
         it("serve double jade founded file", function(done){
             var req={path:'/one'};
