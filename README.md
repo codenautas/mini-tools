@@ -74,7 +74,7 @@ When err is Error("next") *serveErr* calls next and does not send any result to 
 otherwise it sends a 400 error with the message and stack.
 
 
-### serveJade(path, any)
+### serveJade(path, opts)
 
 ```js
 var express = require('express');
@@ -87,12 +87,17 @@ app.use('/main',MiniTools.serveJade('./static/index.jade',false));
 
 
 Returns an express middleware to serve jade files.
+
+If *opts* is boolean it will be the *any* option.
+
 If `any==true` it serves files adding .jade to req.path; and
 if there is no jade file it call `next()`.
 
 If `any==false` it serves that specific file.
 
-**Note**: for use serveJade you must include jade in `package.json`
+Others options in *opts* are pased to `pug.render` function.
+
+**Note**: for use serveJade you must include `"pug"` in `package.json`
 
 
 ### serveStylus(path, any)
@@ -145,6 +150,22 @@ app.use('/config',MiniTools.serveJson(config));
 
 
 Returns an express middleware to serve an object in JSON format.
+
+
+### serveYaml(object)
+
+```js
+var express = require('express');
+var app = express();
+
+var config = {devel:false, title: "title"};
+
+app.use('/config',MiniTools.serveYaml(config));
+```
+
+
+Returns an express middleware to serve an object in yaml format
+(using [js-yaml](https:www.npmjs.com/package/js-yaml)).
 
 
 ### readConfig(list, opts)

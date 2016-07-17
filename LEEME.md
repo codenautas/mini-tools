@@ -121,7 +121,7 @@ otherwise it sends a 400 error with the message and stack.
 
 [!--lang:*-->
 
-### serveJade(path, any)
+### serveJade(path, opts)
 
 ```js
 var express = require('express');
@@ -134,23 +134,35 @@ app.use('/main',MiniTools.serveJade('./static/index.jade',false));
 
 <!--lang:es-->
 
-Retorna un middleware compatible con express que envía y compila archivos jade. 
-Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
+Retorna un middleware compatible con express que envía y compila archivos jade/pug (con extensión *.jade*). 
+
+#### opciones
+
+Si el parámetro *opts* es un booleano se asume que es el valor de la opción *any*. 
+
+Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo *.jade* correspondiente;
 si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
 
 Si `any==false` lo que se especifica es un archivo específico. 
 
-**Nota**: hay que agregar `"jade"` a `package.json`
+Otras opciones especificadas en *opts* son pasadas a la función `pug.render`
+
+**Nota**: hay que agregar el módulo `"pug"` a `package.json`
 
 <!--lang:en--]
 
 Returns an express middleware to serve jade files. 
+
+If *opts* is boolean it will be the *any* option. 
+
 If `any==true` it serves files adding .jade to req.path; and
 if there is no jade file it call `next()`. 
 
 If `any==false` it serves that specific file. 
 
-**Note**: for use serveJade you must include jade in `package.json`
+Others options in *opts* are pased to `pug.render` function.
+
+**Note**: for use serveJade you must include `"pug"` in `package.json`
 
 [!--lang:*-->
 
@@ -228,6 +240,29 @@ Retorna un middleware compatible con express que envía un objeto en formato JSO
 <!--lang:en--]
 
 Returns an express middleware to serve an object in JSON format.
+
+[!--lang:*-->
+
+### serveYaml(object)
+
+```js
+var express = require('express');
+var app = express();
+
+var config = {devel:false, title: "title"};
+
+app.use('/config',MiniTools.serveYaml(config));
+```
+
+<!--lang:es-->
+
+Retorna un middleware compatible con express que envía un objeto en formato yaml 
+(usando [js-yaml](https:www.npmjs.com/package/js-yaml)).
+
+<!--lang:en--]
+
+Returns an express middleware to serve an object in yaml format
+(using [js-yaml](https:www.npmjs.com/package/js-yaml)).
 
 [!--lang:*-->
 
