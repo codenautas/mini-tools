@@ -50,7 +50,8 @@ rules:
   default-case: 0
   dot-location: 0
   dot-notation: 0
-  eqeqeq: 2
+  # OJO eqeqeq
+  eqeqeq: 0 
   guard-for-in: 2
   no-alert: 2
   no-caller: 2
@@ -58,7 +59,7 @@ rules:
   no-div-regex: 2
   no-else-return: 0
   no-empty-pattern: 2
-  no-eq-null: 2
+  no-eq-null: 0
   no-eval: 2
   no-extend-native: 2
   no-extra-bind: 2
@@ -95,11 +96,11 @@ rules:
   no-with: 2
   radix: 2
   vars-on-top: 0
-  wrap-iife: 2
+  wrap-iife: [2, "inside"]
   yoda: 0
 
   # Strict
-  strict: 0
+  strict: 2 #error
 
   # Variables
   init-declarations: 0
