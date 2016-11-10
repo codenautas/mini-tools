@@ -6,12 +6,8 @@
 
 // APP
 
-var _ = require('lodash');
 var express = require('express');
 var app = express();
-// var cookieParser = require('cookie-parser');
-// var bodyParser = require('body-parser');
-var Promises = require('best-promise');
 var MiniTools = require('..');
 
 app.use(function(req,res,next){
@@ -33,7 +29,7 @@ app.use('/public', MiniTools.serveStylus('example/public',true));
 
 var actualConfig;
 
-Promises.start(function(){
+Promise.resolve().then(function(){
     // return readYaml('example/global-config.yaml',{encoding: 'utf8'});
 }).then(function(/*globalConfig*/){
     /*
@@ -49,7 +45,7 @@ Promises.start(function(){
     */
     actualConfig={server: {port:3333}};
 }).then(function(){
-    return new Promises.Promise(function(resolve){
+    return new Promise(function(resolve){
         var server=app.listen(actualConfig.server.port, function() {
             console.log('Listening on port %d', server.address().port);
             resolve();

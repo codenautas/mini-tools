@@ -10,7 +10,6 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 var pug = require('pug');
 var stylus = require('stylus');
-var Promises = require('best-promise');
 var fs = require('fs-promise');
 var MiniTools = require('..');
 var bestGlobals = require('best-globals');
@@ -137,7 +136,7 @@ describe('mini-tools with mocks', function(){
     describe("stylus and jade", function(){
         function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done){
             var stub_readFile=sinon.stub(fs,"readFile");
-            stub_readFile.returns(Promises.Promise.resolve("this css ok"));
+            stub_readFile.returns(Promise.resolve("this css ok"));
             if(!renderizer.baseObject){
                 renderizer={baseObject:renderizer, methodName:"render"};
             }
