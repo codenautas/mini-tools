@@ -175,6 +175,10 @@ describe('mini-tools with mocks', function(){
             var req={path:'/one'};
             testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
         });
+        it("serve jade founded file via url", function(done){
+            var req={url:'/one'};
+            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
+        });
         it("serve json objects", function(done){
             var req={path:'/one-object'};
             testServe(req, null, null, "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', "this css ok", done);
