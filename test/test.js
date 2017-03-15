@@ -31,7 +31,7 @@ describe('mini-tools with mocks', function(){
             MiniTools.serveErr(null,res,null)(err);
             var spyed_console_log=console.log;
             spy_console_log.restore();
-            expect(res.end.firstCall.args[0]).to.match(/^ERROR: this is the message\n-+\nError: this is the message\n\s*at/);
+            expect(res.end.firstCall.args[0]).to.match(/^ERROR: this is the message\n-----+\nError: this is the message\n\s*at/);
             expect(get_headersSent.callCount).to.be(1);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
@@ -52,12 +52,14 @@ describe('mini-tools with mocks', function(){
             var get_headersSent=sinon.stub().returns(true);
             Object.defineProperty(res,'headersSent',{get: get_headersSent});
             var err=new Error("this is a message");
-            err.code='A201'
+            err.code='A201';
+            err.details='the "details"';
+            MiniTools.serveErr.propertiesWhiteList=['code','details'];
             var spy_console_log=sinon.stub(console, "log");
             MiniTools.serveErr(null,res,null)(err);
             var spyed_console_log=console.log;
             spy_console_log.restore();
-            expect(res.end.firstCall.args[0]).to.match(/ERROR A201: this is a message\n-+\nError: this is a message\n\s*at/);
+            expect(res.end.firstCall.args[0]).to.match(/ERROR A201: this is a message\ncode: "A201"\ndetails: "the \\"details\\""\n-----+\nError: this is a message\n\s*at/);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
             expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
