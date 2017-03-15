@@ -79,21 +79,22 @@ describe('mini-tools with mocks', function(){
             var res={};
             res.end=sinon.spy();
             res.writeHead=sinon.spy();
-            var err=new Error("this is the message");
+            var msg="Éste es el mensaje: ¡Sí!";
+            var length=("ERROR: "+msg).length+3 // ansi to UTF8;
+            var err=new Error(msg);
             err.status=403;
             var spy_console_log=sinon.stub(console, "log");
             MiniTools.serveErr.sendStack=false;
             MiniTools.serveErr(null,res,null)(err);
             var spyed_console_log=console.log;
             spy_console_log.restore();
-            expect(res.end.firstCall.args[0]).to.match(/^ERROR: this is the message$/);
+            expect(res.end.firstCall.args[0]).to.match(/^ERROR: Éste es el mensaje: ¡Sí!$/);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
             expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
-            expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is the message\n\s*at/);
+            expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: Éste es el mensaje: ¡Sí!\n\s*at/);
             expect(spyed_console_log.callCount).to.be(2);
-            var length=res.writeHead.firstCall.args[1]['Content-Length'];
-            expect(length).to.eql(res.end.firstCall.args[0].length);
+            expect(res.writeHead.firstCall.args[1]['Content-Length']).to.eql(length);
             expect(res.writeHead.firstCall.args).to.eql([403, {
                 'Content-Length': length,
                 'Content-Type': 'text/plain; charset=utf-8'
