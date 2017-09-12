@@ -147,7 +147,7 @@ describe('mini-tools with mocks', function(){
             stub_render.returns("this{css:ok}");
             var res={};
             var next={};
-            var stub_serveText=sinon.stub(MiniTools,"serveText",function(text, type){
+            var stub_serveText=sinon.stub(MiniTools,"serveText").callsFake(function(text, type){
                 if(fileNameToRead){
                     expect(stub_readFile.firstCall.args).to.eql([fileNameToRead, { encoding: 'utf8' }]);
                     expect(stub_readFile.callCount).to.be(1);
@@ -238,7 +238,7 @@ describe('mini-tools with mocks', function(){
             var res={};
             var next={};
             var stub_serveText=sinon.stub(MiniTools,"serveText");
-            var stub_serveErr=sinon.stub(MiniTools,"serveErr",function(req1, res1, next1){
+            var stub_serveErr=sinon.stub(MiniTools,"serveErr").callsFake(function(req1, res1, next1){
                 return function(err){
                     expect(stub_readFile.firstCall.args).to.eql(['./fixtures/with-bad-content.styl', { encoding: 'utf8' }]);
                     expect(stub_readFile.callCount).to.be(1);

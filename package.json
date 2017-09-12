@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": ["lib"],
@@ -11,21 +11,21 @@
   }],
   "dependencies": {
     "fs-promise": "~2.0.3",
-    "js-yaml": "~3.9.0",
-    "pug": "~2.0.0-rc.2",
+    "js-yaml": "~3.10.0",
+    "pug": "~2.0.0-rc.4",
     "read-yaml-promise": "~1.0.2",
-    "send": "~0.15.3",
+    "send": "~0.15.4",
     "stylus": "~0.54.5",
     
-    "best-globals": "~0.9.0"
+    "best-globals": "~0.10.1"
   },
   "devDependencies": {
     "colors": "~1.1.2",
     "expect.js": "~0.3.1",
-    "express": "~4.15.3",
+    "express": "~4.15.4",
     "istanbul": "~0.4.5",
-    "mocha": "~3.4.2",
-    "sinon": "~2.3.6",
+    "mocha": "~3.5.3",
+    "sinon": "~3.2.1",
     "supertest": "~3.0.0"
   },
   "main": "lib/mini-tools.js",
