@@ -10,7 +10,7 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 var pug = require('pug');
 var stylus = require('stylus');
-var fs = require('fs-promise');
+var fs = require('fs-extra');
 var MiniTools = require('..');
 var bestGlobals = require('best-globals');
 
