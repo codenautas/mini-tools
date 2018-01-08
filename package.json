@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "0.3.20",
+  "version": "0.3.21",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
@@ -15,13 +15,12 @@
     }
   ],
   "dependencies": {
-    "fs-extra": "~4.0.3",
+    "fs-extra": "~5.0.0",
     "js-yaml": "~3.10.0",
     "pug": "~2.0.0-rc.4",
     "read-yaml-promise": "~1.0.2",
     "send": "~0.16.1",
     "stylus": "~0.54.5",
-
     "best-globals": "~0.10.3"
   },
   "devDependencies": {
