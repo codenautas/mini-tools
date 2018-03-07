@@ -11,7 +11,11 @@ import * as readYaml from 'read-yaml-promise';
 import bestGlobals, {changing} from 'best-globals';
 // var changing = bestGlobals.changing;
 import send from 'send';
-import express, {Request, Response, NextFunction} from 'express';
+// import express, {Request, Response, NextFunction} from 'express';
+import * as express from 'express';
+import {Request, Response, NextFunction} from "express-serve-static-core";
+// let {Request, Response, NextFunction}=core;
+// */
 
 export interface AnyErrorDuck extends Error {
     code?: string
@@ -19,8 +23,10 @@ export interface AnyErrorDuck extends Error {
     [key: string]: any
 }
 
-export type ServeFunction = (req: Request, res:Response)=>Promise<void>;
-export type MiddlewareFunction = (req: Request, res:Response, next:NextFunction)=>Promise<void>;
+export type ServeFunction = (req: Request, res:Response)=>void;
+export type MiddlewareFunction = (req: Request, res:Response, next:NextFunction)=>void;
+
+export type TransformPromiseFromFileName = ((fileName:string)=> Promise<string>);
 
 export let globalOpts={
     serveErr:{
@@ -30,9 +36,9 @@ export let globalOpts={
     logServe:false,
     readConfig:{
         exts:{
-            ".yaml": readYaml,
-            ".yml": readYaml,
-            ".json": fs.readJson.bind(fs)
+            ".yaml": readYaml as TransformPromiseFromFileName,
+            ".yml": readYaml as TransformPromiseFromFileName,
+            ".json": fs.readJson.bind(fs) as TransformPromiseFromFileName
         }
     }
 };
@@ -67,19 +73,22 @@ export function serveErr(req:Request,res:Response,next:NextFunction):(err:AnyErr
     };
 };
 
-// MiniTools.preEval=function(expresion, vars, functions){
-//     var r=/\b([a-zA-Z_]+)(\s*\()?/;
-//     var ok=true;
-//     expresion.replace(r,function(_, name, isFun){
-//         if(!(isFun?functions:vars)[name]){
-//             ok=false; // may be throw Exception
-//         }
-//     });
-//     return ok; 
-// };
+export type IdentsMap = {[key:string]:boolean};
+
+export function preEval(expresion:string, vars:IdentsMap, functions:IdentsMap):boolean{
+    var r=/\b([a-zA-Z_]+)(\s*\()?/;
+    var ok=true;
+    expresion.replace(r,function(_:string, name:string, isFun:string):string{
+        if(!(isFun?functions:vars)[name]){
+            ok=false; // may be throw Exception
+        }
+        return "";
+    });
+    return ok; 
+};
 
 export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
-    return async function(req,res){
+    return function(req,res){
         let ct = (contentTypeText||'plain').replace(/^(.*\/)?([^\/]+)$/, function(phrase, first:string, second:string){
             return (first||'text/')+second;
         });
@@ -90,9 +99,9 @@ export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
     };
 };
 
-export function serveFile(fileName,options):ServeFunction{
-    return async function(req,res){
-        await send(req, fileName, options||{}).pipe(res);
+export function serveFile(fileName:string, options:object):ServeFunction{
+    return function(req,res){
+        send(req, fileName, options||{}).pipe(res);
     };
 };
 
@@ -109,9 +118,11 @@ export function getTraceroute():string{
     }
 }
 
+type RenderOptions = {anyFile:boolean, extOriginal:string, trace?:boolean};
+
 function serveTransforming(
     pathToFile:string, 
-    anyFileOrOptions:null|boolean|{anyFile:boolean, extOriginal:string}, 
+    anyFileOrOptions:null|boolean|RenderOptions, 
     extOriginal:string, 
     extTarget:string, 
     renderizer:{render:Function, args:object}, 
@@ -120,7 +131,7 @@ function serveTransforming(
     let regExpExtDetect:RegExp;
     let regExpExtReplace:RegExp;
     let anyFile:boolean;
-    var renderOptions;
+    var renderOptions:RenderOptions;
     if(typeof anyFileOrOptions==="boolean"){
         anyFile=anyFileOrOptions;
     }else if(anyFileOrOptions==null){
@@ -162,7 +173,7 @@ function serveTransforming(
                 }
                 throw err;
             }
-            let args=[fileContent];
+            let args:any[]=[fileContent];
             if(renderOptions!==undefined){
                 args.push(renderOptions);
             }
@@ -177,27 +188,28 @@ function serveTransforming(
     };
 };
 
-export function serveStylus(pathToFile,anyFile):MiddlewareFunction{
+export function serveStylus(pathToFile:string ,anyFile:boolean):MiddlewareFunction{
 /*eslint global-require: 0*/
     return serveTransforming(pathToFile, anyFile, 'css', 'styl', require('stylus'), 'css');
 }
 
-export function serveJade(pathToFile,anyFileOrOptions):MiddlewareFunction{
+export function serveJade(pathToFile:string ,anyFileOrOptions:boolean):MiddlewareFunction{
 /*eslint global-require: 0*/
     return serveTransforming(pathToFile, anyFileOrOptions, '', 'jade', require('pug'), 'html');
 }
 
-export function serveJson(object):MiddlewareFunction{
+export function serveJson(object:any):MiddlewareFunction{
     return serveText(JSON.stringify(object),'application/json');
 };
 
-export function serveYaml(object):MiddlewareFunction{
+export function serveYaml(object:any):MiddlewareFunction{
     return serveText(jsYaml.safeDump(object),'application/x-yaml');
 };
 
 export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[], opts:{whenNotExist?:string}={}):Promise<object>{
     let listOfConfig = await listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
-        let result:{fileName?:string, ext?:string, empty?:boolean};
+        type FileNameExtObjOrEmpty = {fileName?:string, ext?:string, empty?:boolean}
+        let result:FileNameExtObjOrEmpty;
         if(typeof fileNameOrObject==="string"){
                 let ext=Path.extname(fileNameOrObject);
                 let exts:string[];
@@ -205,7 +217,7 @@ export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[
                     exts=[ext];
                 }else{
                     exts=Object.keys(globalOpts.readConfig.exts);
-                    async function searchFileName(){
+                    async function searchFileName():Promise<FileNameExtObjOrEmpty>{
                         if(!exts.length){
                             if(opts.whenNotExist==='ignore'){
                                 return {empty:true};
@@ -215,7 +227,7 @@ export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[
                         }
                         var ext=exts.shift();
                         try{
-                            await fs.access(fileNameOrObject+ext,fs.R_OK);
+                            await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
                             return {ext:ext, fileName:fileNameOrObject+ext};
                         }catch(err){
                             return await searchFileName();
@@ -225,7 +237,7 @@ export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[
                     if(result.empty){
                         return {};
                     }
-                    return await globalOpts.readConfig.exts[result.ext](result.fileName);
+                    return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
                 }
         }else if(typeof fileNameOrObject==="object" && !(fileNameOrObject instanceof Array)){
             return fileNameOrObject;

@@ -7,12 +7,7 @@
         "sourceMap": true,
         "moduleResolution": "node",
         "lib": [ "es2017" ],
-        "noImplicitAny": true,
-        "alwaysStrict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
-        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true
     },
     "include":[
         "src/*.ts"

@@ -1,12 +1,12 @@
-/// <reference types="express" />
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express-serve-static-core";
 export interface AnyErrorDuck extends Error {
     code?: string;
     status?: number;
     [key: string]: any;
 }
-export declare type ServeFunction = (req: Request, res: Response) => Promise<void>;
-export declare type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare type ServeFunction = (req: Request, res: Response) => void;
+export declare type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
+export declare type TransformPromiseFromFileName = ((fileName: string) => Promise<string>);
 export declare let globalOpts: {
     serveErr: {
         propertiesWhiteList: string[];
@@ -15,19 +15,23 @@ export declare let globalOpts: {
     logServe: boolean;
     readConfig: {
         exts: {
-            ".yaml": any;
-            ".yml": any;
-            ".json": any;
+            ".yaml": (fileName: string) => Promise<string>;
+            ".yml": (fileName: string) => Promise<string>;
+            ".json": (fileName: string) => Promise<string>;
         };
     };
 };
 export declare function serveErr(req: Request, res: Response, next: NextFunction): (err: AnyErrorDuck) => Promise<void>;
+export declare type IdentsMap = {
+    [key: string]: boolean;
+};
+export declare function preEval(expresion: string, vars: IdentsMap, functions: IdentsMap): boolean;
 export declare function serveText(htmlText: string, contentTypeText: string): ServeFunction;
-export declare function serveFile(fileName: any, options: any): ServeFunction;
+export declare function serveFile(fileName: string, options: object): ServeFunction;
 export declare function escapeRegExp(string: string): string;
 export declare function getTraceroute(): string;
-export declare function serveStylus(pathToFile: any, anyFile: any): MiddlewareFunction;
-export declare function serveJade(pathToFile: any, anyFileOrOptions: any): MiddlewareFunction;
+export declare function serveStylus(pathToFile: string, anyFile: boolean): MiddlewareFunction;
+export declare function serveJade(pathToFile: string, anyFileOrOptions: boolean): MiddlewareFunction;
 export declare function serveJson(object: any): MiddlewareFunction;
 export declare function serveYaml(object: any): MiddlewareFunction;
 export declare function readConfig(listOfFileNamesOrConfigObjects: (string | object)[], opts?: {
