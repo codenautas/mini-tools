@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express-serve-static-core";
+/// <reference types="express" />
+import { Request, Response, NextFunction } from 'express';
 export interface AnyErrorDuck extends Error {
     code?: string;
     status?: number;

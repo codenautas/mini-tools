@@ -1,0 +1,2 @@
+export function changing(a:object, b:object):object;
+

@@ -10,12 +10,9 @@ import * as readYaml from 'read-yaml-promise';
 
 import bestGlobals, {changing} from 'best-globals';
 // var changing = bestGlobals.changing;
-import send from 'send';
-// import express, {Request, Response, NextFunction} from 'express';
+import * as send from 'send';
 import * as express from 'express';
-import {Request, Response, NextFunction} from "express-serve-static-core";
-// let {Request, Response, NextFunction}=core;
-// */
+import {Request, Response, NextFunction} from 'express';
 
 export interface AnyErrorDuck extends Error {
     code?: string
@@ -101,6 +98,7 @@ export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
 
 export function serveFile(fileName:string, options:object):ServeFunction{
     return function(req,res){
+        console.log('serveFile', fileName, options);
         send(req, fileName, options||{}).pipe(res);
     };
 };
