@@ -335,11 +335,11 @@ describe("fs tools", function(){
         var bg=sinon.spy(bestGlobals, "changing");
         MiniTools.readConfig([
             'test/fixtures/read-config1.json',
-            // 'test/fixtures/read-config2.yaml',
-            // 'test/fixtures/read-config3',
-            // 'test/fixtures/read-config4',
-            // { config2:2.5, config5:5, config6:6.5 },
-            // 'test/fixtures/read-config6',
+            'test/fixtures/read-config2.yaml',
+            'test/fixtures/read-config3',
+            'test/fixtures/read-config4',
+            { config2:2.5, config5:5, config6:6.5 },
+            'test/fixtures/read-config6',
         ]).then(function(cfg){
             expect(cfg).to.eql({
                 config1:1,

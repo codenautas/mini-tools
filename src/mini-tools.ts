@@ -8,7 +8,8 @@ import * as jsYaml from 'js-yaml';
 import * as readYaml from 'read-yaml-promise';
 // var readYaml = require('read-yaml-promise');
 
-import bestGlobals, {changing} from 'best-globals';
+import * as bestGlobals from 'best-globals';
+import {changing} from 'best-globals';
 // var changing = bestGlobals.changing;
 import * as send from 'send';
 import * as express from 'express';
@@ -136,7 +137,7 @@ function serveTransforming(
         anyFile=null;
     }else{
         anyFile=anyFileOrOptions.anyFile;
-        renderOptions=changing(anyFileOrOptions,{anyFile:undefined},changing.options({deletingValue:undefined}));
+        renderOptions=changing(anyFileOrOptions,{anyFile:undefined},changing.options({deletingValue:undefined})) as RenderOptions;
         extOriginal=anyFileOrOptions.extOriginal||extOriginal;
     }
     let traceRoute=renderOptions && renderOptions.trace?'serveContent>'+renderOptions.trace:(globalOpts.logServe?getTraceroute():'');
@@ -205,44 +206,45 @@ export function serveYaml(object:any):MiddlewareFunction{
 };
 
 export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[], opts:{whenNotExist?:string}={}):Promise<object>{
-    let listOfConfig = await listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
+    let listOfConfig = await Promise.all(listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
         type FileNameExtObjOrEmpty = {fileName?:string, ext?:string, empty?:boolean}
         let result:FileNameExtObjOrEmpty;
         if(typeof fileNameOrObject==="string"){
                 let ext=Path.extname(fileNameOrObject);
                 let exts:string[];
                 if(ext){
+                    fileNameOrObject=fileNameOrObject.substr(0,fileNameOrObject.length-ext.length);
                     exts=[ext];
                 }else{
                     exts=Object.keys(globalOpts.readConfig.exts);
-                    async function searchFileName():Promise<FileNameExtObjOrEmpty>{
-                        if(!exts.length){
-                            if(opts.whenNotExist==='ignore'){
-                                return {empty:true};
-                            }else{
-                                throw new Error('Config file does not found '+fileNameOrObject);
-                            }
-                        }
-                        var ext=exts.shift();
-                        try{
-                            await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
-                            return {ext:ext, fileName:fileNameOrObject+ext};
-                        }catch(err){
-                            return await searchFileName();
-                        }
-                    }
-                    result=await searchFileName();
-                    if(result.empty){
-                        return {};
-                    }
-                    return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
                 }
+                async function searchFileName():Promise<FileNameExtObjOrEmpty>{
+                    if(!exts.length){
+                        if(opts.whenNotExist==='ignore'){
+                            return {empty:true};
+                        }else{
+                            throw new Error('Config file does not found '+fileNameOrObject);
+                        }
+                    }
+                    var ext=exts.shift();
+                    try{
+                        await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
+                        return {ext:ext, fileName:fileNameOrObject+ext};
+                    }catch(err){
+                        return await searchFileName();
+                    }
+                }
+                result=await searchFileName();
+                if(result.empty){
+                    return {};
+                }
+                return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
         }else if(typeof fileNameOrObject==="object" && !(fileNameOrObject instanceof Array)){
             return fileNameOrObject;
         }else{
             throw new Error("readConfig must receive string filename or config object");
         }
-    });
+    }));
     return listOfConfig.reduce(function(acumConfig, oneConfig){
         return bestGlobals.changing(acumConfig, oneConfig);
     },{});
