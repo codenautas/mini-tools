@@ -148,42 +148,45 @@ function serveTransforming(
         regExpExtDetect=/^(.*\/)?[^\/\.]+$/;
         regExpExtReplace=/$/g;
     }
-    return async function(req,res,next){
-        try{
-            let pathname = 'path' in req ? req.path : url.parse(req.url).pathname;
-            if(traceRoute){
-                console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
-            }
-            if(anyFile && !regExpExtDetect.test(pathname)){
-                return next();
-            }
-            var sfn;
-            var fileContent;
+    return function(req,res,next){
+        async function unchainedFunction():Promise<void>{
             try{
-                let fileName=(pathToFile+(anyFile?'/'+pathname:'')).replace(regExpExtReplace, '.'+extTarget);
-                sfn=fileName;
-                fileContent = await fs.readFile(fileName, {encoding: 'utf8'});
-            }catch(err){
-                if(anyFile && err.code==='ENOENT'){
-                    if(traceRoute){
-                        console.log('xxxxx-minitools: no encontre el archivo',traceRoute,pathname);
-                    }
-                    throw new Error('next');
+                let pathname = 'path' in req ? req.path : url.parse(req.url).pathname;
+                if(traceRoute){
+                    console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
                 }
-                throw err;
+                if(anyFile && !regExpExtDetect.test(pathname)){
+                    return next();
+                }
+                var sfn;
+                var fileContent;
+                try{
+                    let fileName=(pathToFile+(anyFile?'/'+pathname:'')).replace(regExpExtReplace, '.'+extTarget);
+                    sfn=fileName;
+                    fileContent = await fs.readFile(fileName, {encoding: 'utf8'});
+                }catch(err){
+                    if(anyFile && err.code==='ENOENT'){
+                        if(traceRoute){
+                            console.log('xxxxx-minitools: no encontre el archivo',traceRoute,pathname);
+                        }
+                        throw new Error('next');
+                    }
+                    throw err;
+                }
+                let args:any[]=[fileContent];
+                if(renderOptions!==undefined){
+                    args.push(renderOptions);
+                }
+                let htmlText = await renderizer.render.apply(renderizer,args);
+                if(traceRoute){
+                    console.log('XXXXXXXX!!!!-xxxxx-minitools: ENVIANDO el archivo',traceRoute,pathname);
+                }
+                await serveText(htmlText,textType)(req,res);
+            }catch(err){
+                serveErr(req,res,next)(err)
             }
-            let args:any[]=[fileContent];
-            if(renderOptions!==undefined){
-                args.push(renderOptions);
-            }
-            let htmlText = await renderizer.render.apply(renderizer,args);
-            if(traceRoute){
-                console.log('XXXXXXXX!!!!-xxxxx-minitools: ENVIANDO el archivo',traceRoute,pathname);
-            }
-            await serveText(htmlText,textType)(req,res);
-        }catch(err){
-            serveErr(req,res,next)(err)
-        };
+        }
+        unchainedFunction();
     };
 };
 

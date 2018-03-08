@@ -136,38 +136,34 @@ describe('mini-tools with mocks', function(){
             st(null, res);
         });
     });
-    describe.skip("stylus and jade", function(){
-        function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done){
+    describe("stylus and jade", function(){
+        function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done, expectNext){
             try{
-                var stub_readFile=sinon.stub(fs,"readFile");
-                stub_readFile.returns(Promise.resolve("this css ok"));
                 if(!renderizer.baseObject){
                     renderizer={baseObject:renderizer, methodName:"render"};
                 }
-                var stub_render=sinon.stub(renderizer.baseObject, renderizer.methodName);
-                stub_render.returns("this{css:ok}");
-                var res={setHeader:function(){}, end:function(){}};
-                var next={};
-                var stub_serveText=sinon.stub(MiniTools,"serveText").callsFake(function(text, type){
-                    if(fileNameToRead){
-                        expect(stub_readFile.firstCall.args).to.eql([fileNameToRead, { encoding: 'utf8' }]);
-                        expect(stub_readFile.callCount).to.be(1);
-                    }else{
-                        expect(stub_readFile.callCount).to.be(0);
+                var res={
+                    setHeader:function(){}, 
+                    end:function(sendendContent){
+                        Promise.resolve().then(function(){
+                            if(typeof fileNameToRead == "object"){
+                                return fileNameToRead;
+                            }
+                            return fs.readFile(fileNameToRead, {encoding:'utf8'});
+                        }).then(function(expectedContent){
+                            expect(sendendContent.toString()).to.eql(expectedContent);
+                            done();
+                        }).catch(done);
                     }
-                    expect(stub_render.firstCall.args).to.eql(["this css ok"]);
-                    expect(stub_render.callCount).to.be(1);
-                    stub_readFile.restore();
-                    stub_render.restore();
-                    stub_serveText.restore();
-                    expect(text).to.be("this{css:ok}");
-                    expect(type).to.be(textType);
-                    return function(req1, res1){
-                        expect(req1).to.be(req);
-                        expect(res1).to.be(res);
+                };
+                var next=function(){
+                    if(expectNext){
                         done();
-                    };
-                });
+                    }else{
+                        console.log("ERROR NEXT:",req, any, fileNameToRead, serviceName, textType, baseDir, expectNext)
+                        done("unexpected done for "+fileNameToRead);
+                    }
+                };
                 var serveThis=MiniTools[serviceName](baseDir,any);
                 serveThis(req, res, next);
             }catch(err){
@@ -176,42 +172,42 @@ describe('mini-tools with mocks', function(){
         }
         it("serve stylus founded file", function(done){
             var req={path:'one.css'};
-            testServe(req, true, './fixtures/one.styl', "serveStylus", stylus, 'css', './fixtures', done);
+            testServe(req, true, './test/fixtures/result.one.css', "serveStylus", stylus, 'css', './test/fixtures', done);
         });
         it("serve jade founded file", function(done){
             var req={path:'/one'};
-            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
+            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
         });
         it("serve jade founded file via url", function(done){
             var req={url:'/one'};
-            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
+            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
         });
-        it("serve json objects", function(done){
+        it.skip("serve json objects", function(done){
             var req={path:'/one-object'};
-            testServe(req, null, null, "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', "this css ok", done);
+            testServe(req, null, {one:1}, "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', "test/fixtures", done);
         });
-        it("serve yaml objects", function(done){
+        it.skip("serve yaml objects", function(done){
             var req={path:'/one-object'};
             testServe(req, null, null, "serveYaml", {baseObject:jsYaml, methodName:"safeDump"}, 'application/x-yaml', "this css ok", done);
         });
-        it("serve double jade founded file", function(done){
+        it.skip("serve double jade founded file", function(done){
             var req={path:'/one'};
             testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', function(){
                 testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
             });
         });
-        it("serve specific file file", function(done){
+        it.skip("serve specific file file", function(done){
             var req={path:'one.css'};
             testServe(req, false, 'thisFile', "serveStylus", stylus, 'css', 'thisFile', done);
         });
         var ssAny=MiniTools.serveStylus('./fixtures',true);
-        it("skip non css requests", function(done){
+        it.skip("skip non css requests", function(done){
             var req={path:'other.ext'};
             var next=done;
             var res=null;
             ssAny(req, res, next);
         });
-        it("call next() if not found", function(done){
+        it.skip("call next() if not found", function(done){
             var req={path:'inexis.css'};
             var stub_readFile=sinon.stub(fs,"readFile");
             var ErrorENOENT = new Error("ENOENT: File not found");
@@ -232,7 +228,7 @@ describe('mini-tools with mocks', function(){
             };
             ssAny(req, res, next);
         });
-        it("serve Error if other Error ocurs", function(done){
+        it.skip("serve Error if other Error ocurs", function(done){
             var req={path:'with-bad-content.css'};
             var stub_readFile=sinon.stub(fs,"readFile");
             var ErrorOTHER = new Error("OTHER: Error");

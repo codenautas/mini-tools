@@ -1,4 +1,3 @@
-/// <reference types="express" />
 import { Request, Response, NextFunction } from 'express';
 export interface AnyErrorDuck extends Error {
     code?: string;
@@ -7,7 +6,7 @@ export interface AnyErrorDuck extends Error {
 }
 export declare type ServeFunction = (req: Request, res: Response) => void;
 export declare type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
-export declare type TransformPromiseFromFileName = ((fileName: string) => Promise<string>);
+export declare type TransformPromiseFromFileName = ((fileName: string) => Promise<any>);
 export declare let globalOpts: {
     serveErr: {
         propertiesWhiteList: string[];
@@ -16,9 +15,9 @@ export declare let globalOpts: {
     logServe: boolean;
     readConfig: {
         exts: {
-            ".yaml": (fileName: string) => Promise<string>;
-            ".yml": (fileName: string) => Promise<string>;
-            ".json": (fileName: string) => Promise<string>;
+            ".yaml": (fileName: string) => Promise<any>;
+            ".yml": (fileName: string) => Promise<any>;
+            ".json": (fileName: string) => Promise<any>;
         };
     };
 };
