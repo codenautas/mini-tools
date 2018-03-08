@@ -24,7 +24,7 @@ export interface AnyErrorDuck extends Error {
 export type ServeFunction = (req: Request, res:Response)=>void;
 export type MiddlewareFunction = (req: Request, res:Response, next:NextFunction)=>void;
 
-export type TransformPromiseFromFileName = ((fileName:string)=> Promise<string>);
+export type TransformPromiseFromFileName = ((fileName:string)=> Promise<any>);
 
 export let globalOpts={
     serveErr:{
