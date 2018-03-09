@@ -5,7 +5,10 @@ import * as url from 'url';
 import * as fs from 'fs-extra';
 import * as jsYaml from 'js-yaml';
 
-import * as readYaml from 'read-yaml-promise';
+import * as readYamlPromise from 'read-yaml-promise';
+let readYaml = readYamlPromise as (filename:string) => Promise<any>;
+// import readYaml from 'read-yaml-promise';
+// import * as readYaml from 'read-yaml-promise';
 // var readYaml = require('read-yaml-promise');
 
 import * as bestGlobals from 'best-globals';
@@ -34,10 +37,10 @@ export let globalOpts={
     logServe:false,
     readConfig:{
         exts:{
-            ".yaml": readYaml as TransformPromiseFromFileName,
-            ".yml": readYaml as TransformPromiseFromFileName,
-            ".json": fs.readJson.bind(fs) as TransformPromiseFromFileName
-        }
+            ".yaml": readYaml,
+            ".yml": readYaml,
+            ".json": fs.readJson.bind(fs),
+        } as {[key: string]: TransformPromiseFromFileName} 
     }
 };
 
@@ -150,7 +153,7 @@ function serveTransforming(
     return function(req,res,next){
         async function unchainedFunction():Promise<void>{
             try{
-                let pathname = 'path' in req ? req.path : url.parse(req.url).pathname;
+                let pathname = 'path' in (req as any) ? req.path : url.parse(req.url).pathname;
                 if(traceRoute){
                     console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
                 }

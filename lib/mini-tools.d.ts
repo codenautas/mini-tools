@@ -15,9 +15,7 @@ export declare let globalOpts: {
     logServe: boolean;
     readConfig: {
         exts: {
-            ".yaml": (fileName: string) => Promise<any>;
-            ".yml": (fileName: string) => Promise<any>;
-            ".json": (fileName: string) => Promise<any>;
+            [key: string]: (fileName: string) => Promise<any>;
         };
     };
 };
