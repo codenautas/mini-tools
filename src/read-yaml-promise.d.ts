@@ -1,8 +1,7 @@
 
-declare module 'read-yaml-promise';
-// export function readYaml(fileName:string):Promise<any>;
-
 declare module 'read-yaml-promise'{
-//    export function readYaml(fileName:string):Promise<any>;
+    function readYaml(fileName:string):Promise<any>;
+    namespace readYaml{}
+    export = readYaml;
 }
 

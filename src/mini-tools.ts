@@ -5,15 +5,10 @@ import * as url from 'url';
 import * as fs from 'fs-extra';
 import * as jsYaml from 'js-yaml';
 
-import * as readYamlPromise from 'read-yaml-promise';
-let readYaml = readYamlPromise as (filename:string) => Promise<any>;
-// import readYaml from 'read-yaml-promise';
-// import * as readYaml from 'read-yaml-promise';
-// var readYaml = require('read-yaml-promise');
+import * as readYaml from 'read-yaml-promise';
 
 import * as bestGlobals from 'best-globals';
 import {changing} from 'best-globals';
-// var changing = bestGlobals.changing;
 import * as send from 'send';
 import * as express from 'express';
 import {Request, Response, NextFunction} from 'express';
@@ -153,7 +148,8 @@ function serveTransforming(
     return function(req,res,next){
         async function unchainedFunction():Promise<void>{
             try{
-                let pathname = 'path' in (req as any) ? req.path : url.parse(req.url).pathname;
+                let pathname = 'path' in (req as any /*never*/) ? req.path : url.parse(req.url).pathname;
+                // let pathname = 'path' in req ? req.path : url.parse(req.url).pathname;
                 if(traceRoute){
                     console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
                 }
