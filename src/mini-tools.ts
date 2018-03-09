@@ -99,7 +99,6 @@ export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
 
 export function serveFile(fileName:string, options:object):ServeFunction{
     return function(req,res){
-        console.log('serveFile', fileName, options);
         send(req, fileName, options||{}).pipe(res);
     };
 };

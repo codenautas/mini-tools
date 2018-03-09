@@ -146,9 +146,6 @@ describe('mini-tools with mocks', function(){
                     setHeader:function(){}, 
                     end:function(sendendContent){
                         Promise.resolve().then(function(){
-                            if(typeof fileNameToRead == "object"){
-                                return fileNameToRead;
-                            }
                             return fs.readFile(fileNameToRead, {encoding:'utf8'});
                         }).then(function(expectedContent){
                             expect(sendendContent.toString()).to.eql(expectedContent);
@@ -182,32 +179,32 @@ describe('mini-tools with mocks', function(){
             var req={url:'/one'};
             testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
         });
-        it.skip("serve json objects", function(done){
-            var req={path:'/one-object'};
-            testServe(req, null, {one:1}, "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', "test/fixtures", done);
+        it("serve json objects", function(done){
+            var req={path:'/one-object.json'};
+            testServe(req, null, 'test/fixtures/one-object.json', "serveJson", {baseObject:JSON, methodName:"stringify"}, 'application/json', {one: 1}, done);
         });
-        it.skip("serve yaml objects", function(done){
+        it("serve yaml objects", function(done){
             var req={path:'/one-object'};
-            testServe(req, null, null, "serveYaml", {baseObject:jsYaml, methodName:"safeDump"}, 'application/x-yaml', "this css ok", done);
+            testServe(req, null, 'test/fixtures/one-object.yaml', "serveYaml", {baseObject:jsYaml, methodName:"safeDump"}, 'application/x-yaml', {one: 1}, done);
         });
-        it.skip("serve double jade founded file", function(done){
+        it("serve double jade founded file", function(done){
             var req={path:'/one'};
-            testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', function(){
-                testServe(req, true, 'client//one.jade', "serveJade", pug, 'html', 'client', done);
+            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', function(){
+                testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
             });
         });
-        it.skip("serve specific file file", function(done){
+        it("serve specific file file", function(done){
             var req={path:'one.css'};
-            testServe(req, false, 'thisFile', "serveStylus", stylus, 'css', 'thisFile', done);
+            testServe(req, false, 'test/fixtures/result.specific.css', "serveStylus", stylus, 'css', 'test/fixtures/specific.styl', done);
         });
         var ssAny=MiniTools.serveStylus('./fixtures',true);
-        it.skip("skip non css requests", function(done){
+        it("skip non css requests", function(done){
             var req={path:'other.ext'};
             var next=done;
             var res=null;
             ssAny(req, res, next);
         });
-        it.skip("call next() if not found", function(done){
+        it("call next() if not found", function(done){
             var req={path:'inexis.css'};
             var stub_readFile=sinon.stub(fs,"readFile");
             var ErrorENOENT = new Error("ENOENT: File not found");
@@ -228,30 +225,10 @@ describe('mini-tools with mocks', function(){
             };
             ssAny(req, res, next);
         });
-        it.skip("serve Error if other Error ocurs", function(done){
+        it("serve Error if other Error ocurs", function(done){
             var req={path:'with-bad-content.css'};
-            var stub_readFile=sinon.stub(fs,"readFile");
-            var ErrorOTHER = new Error("OTHER: Error");
-            ErrorOTHER.code = 'OTHER';
-            stub_readFile.throws(ErrorOTHER);
-            var stub_render=sinon.stub(stylus, "render");
             var res={};
-            var next={};
-            var stub_serveText=sinon.stub(MiniTools,"serveText");
-            var stub_serveErr=sinon.stub(MiniTools,"serveErr").callsFake(function(req1, res1, next1){
-                return function(err){
-                    expect(stub_readFile.firstCall.args).to.eql(['./fixtures/with-bad-content.styl', { encoding: 'utf8' }]);
-                    expect(stub_readFile.callCount).to.be(1);
-                    stub_readFile.restore();
-                    stub_render.restore();
-                    stub_serveText.restore();
-                    stub_serveErr.restore();
-                    expect(req1).to.be(req);
-                    expect(next1).to.be(next);
-                    expect(err).to.be(ErrorOTHER);
-                    done();
-                };
-            });
+            var next=done;
             ssAny(req, res, next);
         });
     });
@@ -317,7 +294,7 @@ describe("mini-tools with fake server",function(){
                 var agent=request(server);
                 agent
                 .get('/ok1.png')
-                // .expect('Content-Type','image/png')
+                .expect('Content-Type','image/png')
                 .expect(fileContent)
                 .end(done);
             }).catch(done);
