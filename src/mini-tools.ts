@@ -206,7 +206,7 @@ export function serveYaml(object:any):MiddlewareFunction{
     return serveText(jsYaml.safeDump(object),'application/x-yaml');
 };
 
-export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[], opts:{whenNotExist?:string}={}):Promise<object>{
+export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[], opts:{whenNotExist?:'ignore'}={}):Promise<object>{
     let listOfConfig = await Promise.all(listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
         type FileNameExtObjOrEmpty = {fileName?:string, ext?:string, empty?:boolean}
         let result:FileNameExtObjOrEmpty;
