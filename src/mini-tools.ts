@@ -106,6 +106,7 @@ export function escapeRegExp(string:string):string{
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/* istanbul ignore next */
 export function getTraceroute():string{
     try{
         throw new Error('aca estamos');
@@ -149,7 +150,7 @@ function serveTransforming(
         async function unchainedFunction():Promise<void>{
             try{
                 let pathname = 'path' in (req as any /*never*/) ? req.path : url.parse(req.url).pathname;
-                // let pathname = 'path' in req ? req.path : url.parse(req.url).pathname;
+                /* istanbul ignore next */
                 if(traceRoute){
                     console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
                 }
@@ -164,6 +165,7 @@ function serveTransforming(
                     fileContent = await fs.readFile(fileName, {encoding: 'utf8'});
                 }catch(err){
                     if(anyFile && err.code==='ENOENT'){
+                        /* istanbul ignore next */
                         if(traceRoute){
                             console.log('xxxxx-minitools: no encontre el archivo',traceRoute,pathname);
                         }
@@ -176,6 +178,7 @@ function serveTransforming(
                     args.push(renderOptions);
                 }
                 let htmlText = await renderizer.render.apply(renderizer,args);
+                /* istanbul ignore next */
                 if(traceRoute){
                     console.log('XXXXXXXX!!!!-xxxxx-minitools: ENVIANDO el archivo',traceRoute,pathname);
                 }
@@ -206,7 +209,7 @@ export function serveYaml(object:any):MiddlewareFunction{
     return serveText(jsYaml.safeDump(object),'application/x-yaml');
 };
 
-export async function readConfig(listOfFileNamesOrConfigObjects:(string|object)[], opts:{whenNotExist?:'ignore'}={}):Promise<object>{
+export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[], opts:{whenNotExist?:'ignore'}={}):Promise<T>{
     let listOfConfig = await Promise.all(listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
         type FileNameExtObjOrEmpty = {fileName?:string, ext?:string, empty?:boolean}
         let result:FileNameExtObjOrEmpty;

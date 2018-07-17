@@ -32,6 +32,6 @@ export declare function serveStylus(pathToFile: string, anyFile: boolean): Middl
 export declare function serveJade(pathToFile: string, anyFileOrOptions: boolean): MiddlewareFunction;
 export declare function serveJson(object: any): MiddlewareFunction;
 export declare function serveYaml(object: any): MiddlewareFunction;
-export declare function readConfig(listOfFileNamesOrConfigObjects: (string | object)[], opts?: {
-    whenNotExist?: string;
-}): Promise<object>;
+export declare function readConfig<T>(listOfFileNamesOrConfigObjects: (string | T)[], opts?: {
+    whenNotExist?: 'ignore';
+}): Promise<T>;

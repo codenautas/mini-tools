@@ -1,4 +1,4 @@
-declare module "best-globals" {
+declare module "best-globalsxx" {
     // https://www.typescriptlang.org/docs/handbook/modules.html?#ambient-modules
     export function changing(a:object, b:object, opts?:any):object;
     // https://www.typescriptlang.org/docs/handbook/declaration-merging.html
