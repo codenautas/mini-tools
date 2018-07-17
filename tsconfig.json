@@ -7,11 +7,10 @@
         "sourceMap": true,
         "moduleResolution": "node",
         "lib": [ "es2017" ],
+        "typeRoots" : ["node_modules/@types", "node_modules/types.d.ts/modules", "./types"],
+        "strict": true,
         "noImplicitAny": true,
-        "baseUrl": ".",
-        "typeRoots": [
-            "./types"
-        ]
+        "baseUrl": "."
     },
     "include":[
         "src/*.ts"

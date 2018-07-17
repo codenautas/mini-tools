@@ -127,8 +127,8 @@ function serveTransforming(
 ):MiddlewareFunction{
     let regExpExtDetect:RegExp;
     let regExpExtReplace:RegExp;
-    let anyFile:boolean;
-    var renderOptions:RenderOptions;
+    let anyFile:boolean|null;
+    var renderOptions:RenderOptions|null=null;
     if(typeof anyFileOrOptions==="boolean"){
         anyFile=anyFileOrOptions;
     }else if(anyFileOrOptions==null){
@@ -149,7 +149,7 @@ function serveTransforming(
     return function(req,res,next){
         async function unchainedFunction():Promise<void>{
             try{
-                let pathname = 'path' in (req as any /*never*/) ? req.path : url.parse(req.url).pathname;
+                let pathname:string = ('path' in (req as any /*never*/) ? req.path : url.parse(req.url).pathname) as string;
                 /* istanbul ignore next */
                 if(traceRoute){
                     console.log('xxxxx-minitools-por-revisar',traceRoute,pathname);
@@ -211,7 +211,7 @@ export function serveYaml(object:any):MiddlewareFunction{
 
 export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[], opts:{whenNotExist?:'ignore'}={}):Promise<T>{
     let listOfConfig = await Promise.all(listOfFileNamesOrConfigObjects.map(async function(fileNameOrObject){
-        type FileNameExtObjOrEmpty = {fileName?:string, ext?:string, empty?:boolean}
+        type FileNameExtObjOrEmpty = {fileName:string, ext:string}|{empty:true}
         let result:FileNameExtObjOrEmpty;
         if(typeof fileNameOrObject==="string"){
                 let ext=Path.extname(fileNameOrObject);
@@ -223,26 +223,29 @@ export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[],
                     exts=Object.keys(globalOpts.readConfig.exts);
                 }
                 async function searchFileName():Promise<FileNameExtObjOrEmpty>{
-                    if(!exts.length){
+                    if(exts.length){
+                        // TODO: algún día esto no va a ser necesario porque van a implementar los arreglos compactos!
+                        var ext=exts.shift() as string;
+                        try{
+                            await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
+                            return {ext:ext, fileName:fileNameOrObject+ext};
+                        }catch(err){
+                            return await searchFileName();
+                        }
+                    }else{
                         if(opts.whenNotExist==='ignore'){
                             return {empty:true};
                         }else{
                             throw new Error('Config file does not found '+fileNameOrObject);
                         }
                     }
-                    var ext=exts.shift();
-                    try{
-                        await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
-                        return {ext:ext, fileName:fileNameOrObject+ext};
-                    }catch(err){
-                        return await searchFileName();
-                    }
                 }
                 result=await searchFileName();
-                if(result.empty){
+                if('empty' in result){
                     return {};
+                }else{
+                    return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
                 }
-                return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
         }else if(typeof fileNameOrObject==="object" && !(fileNameOrObject instanceof Array)){
             return fileNameOrObject;
         }else{
