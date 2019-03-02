@@ -32,3 +32,5 @@ local-*
 package-lock.json
 
 .nyc_output
+
+*.bak
