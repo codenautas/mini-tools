@@ -3,14 +3,17 @@
         "declaration": true,
         "outDir": "lib",
         "module": "none",
-        "target": "es2017",
+        "target": "esnext",
         "sourceMap": true,
         "moduleResolution": "node",
         "lib": [ "es2017" ],
         "typeRoots" : ["node_modules/@types", "node_modules/types.d.ts/modules", "./types"],
         "strict": true,
         "noImplicitAny": true,
-        "baseUrl": "."
+        "baseUrl": ".",
+        "plugins": [
+          { "name": "typescript-tslint-plugin" }
+        ],
     },
     "include":[
         "src/*.ts"

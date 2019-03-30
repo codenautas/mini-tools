@@ -158,7 +158,11 @@ describe('mini-tools with mocks', function(){
                         done();
                     }else{
                         console.log("ERROR NEXT:",req, any, fileNameToRead, serviceName, textType, baseDir, expectNext)
-                        done("unexpected done for "+fileNameToRead);
+                        if(fileNameToRead===false){
+                            done();
+                        }else{
+                            done("unexpected done for "+fileNameToRead);
+                        }
                     }
                 };
                 var serveThis=MiniTools[serviceName](baseDir,any);
@@ -170,6 +174,10 @@ describe('mini-tools with mocks', function(){
         it("serve stylus founded file", function(done){
             var req={path:'one.css'};
             testServe(req, true, './test/fixtures/result.one.css', "serveStylus", stylus, 'css', './test/fixtures', done);
+        });
+        it("send error when serve stylus rare file", function(done){
+            var req={path:'inexistenting.css'};
+            testServe(req, true, false, "serveStylus", stylus, 'css', './test/fixtures3', done )
         });
         it("serve jade founded file", function(done){
             var req={path:'/one'};

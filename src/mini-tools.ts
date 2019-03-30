@@ -10,7 +10,6 @@ import * as readYaml from 'read-yaml-promise';
 import * as bestGlobals from 'best-globals';
 import {changing} from 'best-globals';
 import * as send from 'send';
-import * as express from 'express';
 import {Request, Response, NextFunction} from 'express';
 
 export interface AnyErrorDuck extends Error {
@@ -24,6 +23,7 @@ export type MiddlewareFunction = (req: Request, res:Response, next:NextFunction)
 
 export type TransformPromiseFromFileName = ((fileName:string)=> Promise<any>);
 
+/* tslint:disable:no-object-literal-type-assertion */
 export let globalOpts={
     serveErr:{
         propertiesWhiteList:['code'],
@@ -38,8 +38,9 @@ export let globalOpts={
         } as {[key: string]: TransformPromiseFromFileName} 
     }
 };
+/* tslint:enable:no-object-literal-type-assertion */
 
-export function serveErr(req:Request,res:Response,next:NextFunction):(err:AnyErrorDuck) => Promise<void>{
+export function serveErr(_req:Request,res:Response,next:NextFunction):(err:AnyErrorDuck) => Promise<void>{
     return async function(err:AnyErrorDuck){
         if(err.message==='next'){
             return next();
@@ -132,12 +133,14 @@ function serveTransforming(
     if(typeof anyFileOrOptions==="boolean"){
         anyFile=anyFileOrOptions;
     }else if(anyFileOrOptions==null){
+        /* istanbul ignore next */
         anyFile=null;
     }else{
         anyFile=anyFileOrOptions.anyFile;
         renderOptions=changing(anyFileOrOptions,{anyFile:undefined},changing.options({deletingValue:undefined})) as RenderOptions;
         extOriginal=anyFileOrOptions.extOriginal||extOriginal;
     }
+    /* istanbul ignore next */
     let traceRoute=renderOptions && renderOptions.trace?'serveContent>'+renderOptions.trace:(globalOpts.logServe?getTraceroute():'');
     if(extOriginal){
         regExpExtDetect =new RegExp('\.'+escapeRegExp(extOriginal)+'$');
@@ -182,12 +185,12 @@ function serveTransforming(
                 if(traceRoute){
                     console.log('XXXXXXXX!!!!-xxxxx-minitools: ENVIANDO el archivo',traceRoute,pathname);
                 }
-                await serveText(htmlText,textType)(req,res);
+                serveText(htmlText,textType)(req,res);
             }catch(err){
-                serveErr(req,res,next)(err)
+                await serveErr(req,res,next)(err)
             }
         }
-        unchainedFunction();
+        void unchainedFunction();
     };
 };
 
@@ -230,7 +233,7 @@ export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[],
                             await fs.access(fileNameOrObject+ext,fs.constants.R_OK);
                             return {ext:ext, fileName:fileNameOrObject+ext};
                         }catch(err){
-                            return await searchFileName();
+                            return searchFileName();
                         }
                     }else{
                         if(opts.whenNotExist==='ignore'){
@@ -244,7 +247,7 @@ export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[],
                 if('empty' in result){
                     return {};
                 }else{
-                    return await (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
+                    return (globalOpts.readConfig.exts[result.ext] as TransformPromiseFromFileName)(result.fileName);
                 }
         }else if(typeof fileNameOrObject==="object" && !(fileNameOrObject instanceof Array)){
             return fileNameOrObject;

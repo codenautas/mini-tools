@@ -19,7 +19,7 @@ export declare let globalOpts: {
         };
     };
 };
-export declare function serveErr(req: Request, res: Response, next: NextFunction): (err: AnyErrorDuck) => Promise<void>;
+export declare function serveErr(_req: Request, res: Response, next: NextFunction): (err: AnyErrorDuck) => Promise<void>;
 export declare type IdentsMap = {
     [key: string]: boolean;
 };

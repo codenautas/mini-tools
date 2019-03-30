@@ -1,0 +1,22 @@
+rules:
+  no-floating-promises: true
+  promise-async-function: true
+  await-promise: true
+  ban-comma-operator: true
+  no-bitwise: true  
+  no-conditiontal-assigment: true
+  no-construct: true
+  no-duplicate-super: true
+  no-eval: true
+  no-for-in-array: true
+  no-invalid-template-strings: true
+  no-object-literal-type-assertion: true
+  no-return-await: true
+  no-sparse-array: true
+  no-string-throw: true
+  no-switch-case-fall-through: true
+  no-unbound-method: true
+  no-unused-variable: true
+  no-use-before-declare: true
+  typeof-compare: true
+  no-angle-bracket-type-assertion: true
