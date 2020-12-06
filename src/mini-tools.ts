@@ -57,7 +57,7 @@ export function serveErr(_req:Request,res:Response,next:NextFunction):(err:AnyEr
             text+='\n------------------\n'+err.stack;
         }
         if(!res.headersSent){
-            let buf=new Buffer(text);
+            let buf=Buffer.from(text,'utf8');
             let length=buf.length;
             res.writeHead(err.status || 400, {
                 'Content-Length': length,
@@ -90,7 +90,7 @@ export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
             return (first||'text/')+second;
         });
         res.setHeader('Content-Type', ct+'; charset=utf-8');
-        let buf=new Buffer(htmlText);
+        let buf=Buffer.from(htmlText,'utf8');
         res.setHeader('Content-Length', buf.length);
         res.end(buf);
     };

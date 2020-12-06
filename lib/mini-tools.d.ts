@@ -15,7 +15,7 @@ export declare let globalOpts: {
     logServe: boolean;
     readConfig: {
         exts: {
-            [key: string]: (fileName: string) => Promise<any>;
+            [key: string]: TransformPromiseFromFileName;
         };
     };
 };
