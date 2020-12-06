@@ -5,7 +5,7 @@ mini tools for express and others
 ![extending](https://img.shields.io/badge/stability-extending-orange.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
-[![Node.js CI](https://github.com/codenautas/mini-tools/workflows/Node.js%20CI/badge.svg)](https://github.com/codenautas/mini-tools/actions/runs/404312223)
+[![Node.js CI](https://github.com/codenautas/mini-tools/workflows/Node.js%20CI/badge.svg)](https://github.com/codenautas/mini-tools/actions?query=workflow%3A%22Node.js+CI%22)
 [![windows](https://ci.appveyor.com/api/projects/status/github/codenautas/mini-tools?svg=true)](https://ci.appveyor.com/project/codenautas/mini-tools)
 [![coverage](https://img.shields.io/coveralls/codenautas/mini-tools/master.svg)](https://coveralls.io/r/codenautas/mini-tools)
 [![dependencies](https://img.shields.io/david/codenautas/mini-tools.svg)](https://david-dm.org/codenautas/mini-tools)
