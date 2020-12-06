@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Request, Response, NextFunction } from 'express';
 export interface AnyErrorDuck extends Error {
     code?: string;
@@ -24,6 +25,8 @@ export declare type IdentsMap = {
     [key: string]: boolean;
 };
 export declare function preEval(expresion: string, vars: IdentsMap, functions: IdentsMap): boolean;
+export declare function serveBuffer(buf: Buffer, headers: [type: string, value: string][]): ServeFunction;
+export declare function serveImage(imageBuffer: Buffer, headers: [type: string, value: string][]): ServeFunction;
 export declare function serveText(htmlText: string, contentTypeText: string): ServeFunction;
 export declare function serveFile(fileName: string, options: object): ServeFunction;
 export declare function escapeRegExp(string: string): string;

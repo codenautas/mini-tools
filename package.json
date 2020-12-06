@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
@@ -21,7 +21,7 @@
     "read-yaml-promise": "^1.0.2",
     "send": "~0.17.1",
     "stylus": "~0.54.8",
-    "best-globals": "~0.10.30"
+    "best-globals": "~0.10.31"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",

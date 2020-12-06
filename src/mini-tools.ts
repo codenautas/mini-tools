@@ -84,16 +84,25 @@ export function preEval(expresion:string, vars:IdentsMap, functions:IdentsMap):b
     return ok; 
 };
 
-export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
+export function serveBuffer(buf:Buffer,headers:[type:string, value:string][]):ServeFunction{
     return function(req,res){
-        let ct = (contentTypeText||'plain').replace(/^(.*\/)?([^\/]+)$/, function(phrase, first:string, second:string){
-            return (first||'text/')+second;
-        });
-        res.setHeader('Content-Type', ct+'; charset=utf-8');
-        let buf=Buffer.from(htmlText,'utf8');
+        headers.forEach(([type,value]:[type:string, value:string])=>{
+            res.setHeader(type, value);
+        })
         res.setHeader('Content-Length', buf.length);
         res.end(buf);
     };
+};
+
+export function serveImage(imageBuffer:Buffer,headers:[type:string, value:string][]):ServeFunction{
+    return serveBuffer(imageBuffer, headers);
+};
+
+export function serveText(htmlText:string,contentTypeText:string):ServeFunction{
+    let ct = (contentTypeText||'plain').replace(/^(.*\/)?([^\/]+)$/, function(phrase, first:string, second:string){
+        return (first||'text/')+second;
+    });
+    return serveBuffer(Buffer.from(htmlText,'utf8'), [['Content-Type', ct+'; charset=utf-8']]);
 };
 
 export function serveFile(fileName:string, options:object):ServeFunction{
