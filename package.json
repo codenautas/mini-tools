@@ -44,13 +44,13 @@
   "main": "lib/mini-tools.js",
   "types": "lib/mini-tools.d.ts",
   "engines": {
-    "node": ">= 8"
+    "node": ">= 12"
   },
   "scripts": {
     "build": "tsc",
     "test": "mocha --reporter spec --bail --check-leaks --exit test/",
     "test-ci": "node node_modules/nyc/bin/nyc --reporter=lcov --reporter=text-lcov node_modules/mocha/bin/_mocha --exit --check-leaks test/",
-    "test-cov": "node node_modules/nyc/bin/nyc mocha --exit",
+    "test-cov": "nyc mocha --exit test/",
     "start": "node example/server.js"
   },
   "nyc": {
@@ -59,10 +59,13 @@
       ".tsx"
     ],
     "exclude": [
-      "**/*.d.ts"
+      "**/*.d.ts",
+      "coverage",
+      "example",
+      "test"
     ],
-    "include": [
-      "lib"
+    "include":[
+      "**"
     ],
     "reporter": [
       "html",
