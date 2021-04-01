@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
@@ -15,31 +15,31 @@
     }
   ],
   "dependencies": {
-    "fs-extra": "^9.0.1",
-    "js-yaml": "^3.14.0",
-    "pug": "^3.0.0",
+    "fs-extra": "^9.1.0",
+    "js-yaml": "^4.0.0",
+    "pug": "^3.0.2",
     "read-yaml-promise": "^1.0.2",
     "send": "~0.17.1",
     "stylus": "~0.54.8",
     "best-globals": "~0.10.31"
   },
   "devDependencies": {
-    "@types/express": "^4.17.9",
-    "@types/fs-extra": "^9.0.4",
-    "@types/js-yaml": "^3.12.5",
-    "@types/mocha": "^8.0.4",
-    "@types/node": "^14.14.10",
-    "@types/send": "~0.14.5",
+    "@types/express": "^4.17.11",
+    "@types/fs-extra": "^9.0.9",
+    "@types/js-yaml": "^4.0.0",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.37",
+    "@types/send": "~0.14.7",
     "colors": "^1.4.0",
     "expect.js": "~0.3.1",
     "express": "^4.17.1",
-    "mocha": "^8.2.1",
+    "mocha": "^8.3.2",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.1",
+    "sinon": "^10.0.0",
     "source-map-support": "~0.5.19",
-    "supertest": "^6.0.1",
-    "ts-node": "^9.1.0",
-    "typescript": "~4.1.2"
+    "supertest": "^6.1.3",
+    "ts-node": "^9.1.1",
+    "typescript": "~4.2.3"
   },
   "main": "lib/mini-tools.js",
   "types": "lib/mini-tools.d.ts",
@@ -64,7 +64,7 @@
       "example",
       "test"
     ],
-    "include":[
+    "include": [
       "**"
     ],
     "reporter": [

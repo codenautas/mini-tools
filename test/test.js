@@ -193,7 +193,7 @@ describe('mini-tools with mocks', function(){
         });
         it("serve yaml objects", function(done){
             var req={path:'/one-object'};
-            testServe(req, null, 'test/fixtures/one-object.yaml', "serveYaml", {baseObject:jsYaml, methodName:"safeDump"}, 'application/x-yaml', {one: 1}, done);
+            testServe(req, null, 'test/fixtures/one-object.yaml', "serveYaml", {baseObject:jsYaml, methodName:"dump"}, 'application/x-yaml', {one: 1}, done);
         });
         it("serve double jade founded file", function(done){
             var req={path:'/one'};

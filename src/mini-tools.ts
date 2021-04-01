@@ -218,7 +218,7 @@ export function serveJson(object:any):MiddlewareFunction{
 };
 
 export function serveYaml(object:any):MiddlewareFunction{
-    return serveText(jsYaml.safeDump(object),'application/x-yaml');
+    return serveText(jsYaml.dump(object),'application/x-yaml');
 };
 
 export async function readConfig<T>(listOfFileNamesOrConfigObjects:(string|T)[], opts:{whenNotExist?:'ignore'}={}):Promise<T>{
