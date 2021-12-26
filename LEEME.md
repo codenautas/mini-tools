@@ -9,7 +9,7 @@ mini tools for express and others
 [!--lang:*-->
 
 <!-- cucardas -->
-![extending](https://img.shields.io/badge/stability-extending-orange.svg)
+![stable](https://img.shields.io/badge/stability-stable-blue.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![build](https://github.com/codenautas/mini-tools/workflows/Node.js%20CI/badge.svg)](https://github.com/codenautas/mini-tools/actions?query=workflow%3A%22Node.js+CI%22)
