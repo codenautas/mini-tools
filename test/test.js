@@ -149,7 +149,7 @@ describe('mini-tools with mocks', function(){
                             return fs.readFile(fileNameToRead, {encoding:'utf8'});
                         }).then(function(expectedContent){
                             expect(sendendContent.toString()).to.eql(expectedContent);
-                            done();
+                            done(expectNext ? new Error("expecting next") : null);
                         }).catch(done);
                     }
                 };
@@ -197,9 +197,17 @@ describe('mini-tools with mocks', function(){
         });
         it("serve double jade founded file", function(done){
             var req={path:'/one'};
-            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', function(){
+            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', function(err){
+                if(err) return done(err);
                 testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
             });
+        });
+        it("serve jade not fundend then founded file", function(done){
+            var req={path:'/one'};
+            testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'example', function(err){
+                if(err) return done(err);
+                testServe(req, true, './test/fixtures/result.one.html', "serveJade", pug, 'html', 'test/fixtures', done);
+            }, true);
         });
         it("serve specific file file", function(done){
             var req={path:'one.css'};

@@ -9,6 +9,7 @@ import * as readYaml from 'read-yaml-promise';
 
 import * as bestGlobals from 'best-globals';
 import {changing} from 'best-globals';
+import {expected, unexpected} from 'cast-error';
 import * as send from 'send';
 import {Request, Response, NextFunction} from 'express';
 
@@ -121,7 +122,8 @@ export function getTraceroute():string{
     try{
         throw new Error('aca estamos');
     }catch(err){
-        return err.stack.split('\n')[4];
+        var error = expected(err);
+        return error.stack?.split('\n')[4]??'';
     }
 }
 
@@ -176,7 +178,8 @@ function serveTransforming(
                     sfn=fileName;
                     fileContent = await fs.readFile(fileName, {encoding: 'utf8'});
                 }catch(err){
-                    if(anyFile && err.code==='ENOENT'){
+                    var error = expected(err);
+                    if(anyFile && error.code==='ENOENT'){
                         /* istanbul ignore next */
                         if(traceRoute){
                             console.log('xxxxx-minitools: no encontre el archivo',traceRoute,pathname);
@@ -185,6 +188,8 @@ function serveTransforming(
                     }
                     throw err;
                 }
+                var err = bestGlobals.changing(new Error('algo'),{code:'77'});
+                err.code;
                 let args:any[]=[fileContent];
                 if(renderOptions!==undefined){
                     args.push(renderOptions);
@@ -196,7 +201,8 @@ function serveTransforming(
                 }
                 serveText(htmlText,textType)(req,res);
             }catch(err){
-                await serveErr(req,res,next)(err)
+                var error = expected(err);
+                await serveErr(req,res,next)(error)
             }
         }
         void unchainedFunction();
