@@ -5,9 +5,9 @@ export interface AnyErrorDuck extends Error {
     status?: number;
     [key: string]: any;
 }
-export declare type ServeFunction = (req: Request, res: Response) => void;
-export declare type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
-export declare type TransformPromiseFromFileName = ((fileName: string) => Promise<any>);
+export type ServeFunction = (req: Request, res: Response) => void;
+export type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
+export type TransformPromiseFromFileName = ((fileName: string) => Promise<any>);
 export declare let globalOpts: {
     serveErr: {
         propertiesWhiteList: string[];
@@ -21,7 +21,7 @@ export declare let globalOpts: {
     };
 };
 export declare function serveErr(_req: Request, res: Response, next: NextFunction): (err: AnyErrorDuck) => Promise<void>;
-export declare type IdentsMap = {
+export type IdentsMap = {
     [key: string]: boolean;
 };
 export declare function preEval(expresion: string, vars: IdentsMap, functions: IdentsMap): boolean;
