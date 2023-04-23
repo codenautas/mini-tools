@@ -41,14 +41,19 @@ export let globalOpts={
 };
 /* tslint:enable:no-object-literal-type-assertion */
 
+var errorList:string[] = [];
+
 export function serveErr(_req:Request,res:Response,next:NextFunction):(err:AnyErrorDuck) => Promise<void>{
     return async function(err:AnyErrorDuck){
         if(err.message==='next'){
             return next();
         }
-        console.log('ERROR', err);
-        console.log('STACK', err.stack);
+        if (errorList.length > 100) errorList.shift();
         let text='ERROR'+(err.code?' '+err.code:'')+': '+err.message;
+        if (!errorList.includes(text)) {
+            errorList.push(text);
+            console.log('ERROR', err);
+        }
         globalOpts.serveErr.propertiesWhiteList.forEach(function(attrName){
             if(attrName in err){
                 text+='\n'+attrName+': '+JSON.stringify(err[attrName]);
