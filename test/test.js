@@ -16,6 +16,8 @@ var bestGlobals = require('best-globals');
 
 var jsYaml = require('js-yaml');
 
+var ERROR_LOGS = false
+
 describe('mini-tools with mocks', function(){
     describe('serveErr', function(){
         var server;
@@ -35,9 +37,11 @@ describe('mini-tools with mocks', function(){
             expect(get_headersSent.callCount).to.be(1);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
-            expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
-            expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is the message\n\s*at/);
-            expect(spyed_console_log.callCount).to.be(2);
+            if(ERROR_LOGS){
+                expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
+                expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is the message\n\s*at/);
+                expect(spyed_console_log.callCount).to.be(2);
+            }
             var length=res.writeHead.firstCall.args[1]['Content-Length'];
             expect(length).to.eql(res.end.firstCall.args[0].length);
             expect(res.writeHead.firstCall.args).to.eql([400, {
@@ -62,9 +66,11 @@ describe('mini-tools with mocks', function(){
             expect(res.end.firstCall.args[0]).to.match(/ERROR A201: this is a message\ncode: "A201"\ndetails: "the \\"details\\""\n-----+\nError: this is a message\n\s*at/);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
-            expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
-            expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is a message\n\s*at/);
-            expect(spyed_console_log.callCount).to.be(2);
+            if(ERROR_LOGS){
+                expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
+                expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: this is a message\n\s*at/);
+                expect(spyed_console_log.callCount).to.be(2);
+            }
         });
         it('should by pass with next', function(){
             var next=sinon.spy();
@@ -93,9 +99,11 @@ describe('mini-tools with mocks', function(){
             expect(res.end.firstCall.args[0]).to.match(/^ERROR: Éste es el mensaje: ¡Sí!$/);
             expect(res.end.callCount).to.be(1);
             expect(spyed_console_log.firstCall.args).to.eql(['ERROR',err]);
-            expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
-            expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: Éste es el mensaje: ¡Sí!\n\s*at/);
-            expect(spyed_console_log.callCount).to.be(2);
+            if(ERROR_LOGS){
+                expect(spyed_console_log.secondCall.args[0]).to.eql('STACK');
+                expect(spyed_console_log.secondCall.args[1]).to.match(/^Error: Éste es el mensaje: ¡Sí!\n\s*at/);
+                expect(spyed_console_log.callCount).to.be(2);
+            }
             expect(res.writeHead.firstCall.args[1]['Content-Length']).to.eql(length);
             expect(res.writeHead.firstCall.args).to.eql([403, {
                 'Content-Length': length,

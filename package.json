@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
@@ -21,7 +21,7 @@
     "read-yaml-promise": "^1.0.2",
     "send": "^0.18.0",
     "stylus": "^0.59.0",
-    "best-globals": "^1.1.0",
+    "best-globals": "^1.1.1",
     "cast-error": "^0.1.0"
   },
   "devDependencies": {
@@ -29,14 +29,14 @@
     "@types/fs-extra": "^11.0.1",
     "@types/js-yaml": "^4.0.5",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.16.0",
+    "@types/node": "^20.2.5",
     "@types/send": "~0.17.1",
     "colors": "^1.4.0",
     "expect.js": "~0.3.1",
     "express": "^4.18.2",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "sinon": "^15.0.4",
+    "sinon": "^15.1.0",
     "source-map-support": "~0.5.21",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
