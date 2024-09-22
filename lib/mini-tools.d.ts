@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { Request, Response, NextFunction } from 'express';
 export interface AnyErrorDuck extends Error {
     code?: string;

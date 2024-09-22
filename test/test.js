@@ -391,7 +391,7 @@ describe("fs tools", function(){
         ], {whenNotExist:'ignore'}).then(function(){
             done(new Error("must fail because of invalid content"));
         },function(err){
-            expect(err.message).to.match(/Unexpected token/);
+            expect(err.message).to.match(/Unexpected token|in JSON/);
             done();
         }).catch(done);
     });
