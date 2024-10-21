@@ -2,7 +2,8 @@
 
 import * as Path from "path";
 import * as url from 'url';
-import * as fs from 'fs-extra';
+import {promises as fs} from 'fs';
+import * as FS from 'fs';
 import * as jsYaml from 'js-yaml';
 
 import * as readYaml from 'read-yaml-promise';
@@ -24,6 +25,10 @@ export type MiddlewareFunction = (req: Request, res:Response, next:NextFunction)
 
 export type TransformPromiseFromFileName = ((fileName:string)=> Promise<any>);
 
+export function readJson(p:string){
+    return fs.readFile(p, 'utf8').then(c => JSON.parse(c))
+}
+
 /* tslint:disable:no-object-literal-type-assertion */
 export let globalOpts={
     serveErr:{
@@ -35,7 +40,7 @@ export let globalOpts={
         exts:{
             ".yaml": readYaml,
             ".yml": readYaml,
-            ".json": fs.readJson.bind(fs),
+            ".json": readJson,
         } as {[key: string]: TransformPromiseFromFileName} 
     }
 };
@@ -176,11 +181,13 @@ function serveTransforming(
                 if(anyFile && !regExpExtDetect.test(pathname)){
                     return next();
                 }
-                var sfn;
                 var fileContent;
                 try{
                     let fileName=(pathToFile+(anyFile?'/'+pathname:'')).replace(regExpExtReplace, '.'+extTarget);
-                    sfn=fileName;
+                    var status = await new Promise(function(resolve){ FS.exists(fileName, resolve); });
+                    if (!status){ 
+                        return next();
+                    }
                     fileContent = await fs.readFile(fileName, {encoding: 'utf8'});
                 }catch(err){
                     var error = expected(err);
@@ -189,7 +196,7 @@ function serveTransforming(
                         if(traceRoute){
                             console.log('xxxxx-minitools: no encontre el archivo',traceRoute,pathname);
                         }
-                        throw new Error('next');
+                        return next();
                     }
                     throw err;
                 }

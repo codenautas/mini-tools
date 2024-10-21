@@ -10,9 +10,10 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 var pug = require('pug');
 var stylus = require('stylus');
-var fs = require('fs-extra');
 var MiniTools = require('..');
 var bestGlobals = require('best-globals');
+var fs = require('fs').promises;
+var FS = require('fs');
 
 var jsYaml = require('js-yaml');
 
@@ -230,19 +231,19 @@ describe('mini-tools with mocks', function(){
         });
         it("call next() if not found", function(done){
             var req={path:'inexis.css'};
-            var stub_readFile=sinon.stub(fs,"readFile");
+            var stub_exists=sinon.stub(FS,"exists");
             var ErrorENOENT = new Error("ENOENT: File not found");
             ErrorENOENT.code = 'ENOENT';
-            stub_readFile.throws(ErrorENOENT);
+            stub_exists.throws(ErrorENOENT);
             var stub_render=sinon.stub(stylus, "render");
             var res={};
             var stub_serveText=sinon.stub(MiniTools,"serveText");
             var next=function(){
-                expect(stub_readFile.callCount).to.be(1);
-                expect(stub_readFile.firstCall.args).to.eql(['./fixtures/inexis.styl', { encoding: 'utf8' }]);
+                expect(stub_exists.callCount).to.be(1);
+                expect(stub_exists.firstCall.args[0]).to.eql('./fixtures/inexis.styl');
                 expect(stub_render.callCount).to.be(0);
                 expect(stub_serveText.callCount).to.be(0);
-                stub_readFile.restore();
+                stub_exists.restore();
                 stub_render.restore();
                 stub_serveText.restore();
                 done();

@@ -7,6 +7,7 @@ export interface AnyErrorDuck extends Error {
 export type ServeFunction = (req: Request, res: Response) => void;
 export type MiddlewareFunction = (req: Request, res: Response, next: NextFunction) => void;
 export type TransformPromiseFromFileName = ((fileName: string) => Promise<any>);
+export declare function readJson(p: string): Promise<any>;
 export declare let globalOpts: {
     serveErr: {
         propertiesWhiteList: string[];
