@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "1.13.4",
+  "version": "1.13.5",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
