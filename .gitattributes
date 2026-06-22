@@ -1,0 +1,6 @@
+# Normalize to LF in the repo on commit; check out with the OS-native EOL.
+* text=auto
+
+test/fixtures/one-object.yaml text eol=lf
+test/fixtures/result.one.css text eol=lf
+test/fixtures/result.specific.css text eol=lf

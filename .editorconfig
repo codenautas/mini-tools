@@ -1,0 +1,95 @@
+root = true
+
+# Defaults for every file
+[*]
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+
+[.gitignore]
+insert_final_newline = false
+
+[.vscode/launch.json]
+insert_final_newline = false
+
+[.vscode/settings.json]
+insert_final_newline = false
+
+[LEEME.md]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[LICENSE]
+insert_final_newline = false
+
+[README.md]
+insert_final_newline = false
+
+[example/public/example.jade]
+insert_final_newline = false
+
+[example/public/index.jade]
+insert_final_newline = false
+
+[lib/mini-tools.js]
+insert_final_newline = false
+
+[lib/mini-tools.js.map]
+insert_final_newline = false
+
+[src/mini-tools.ts]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[test/fixtures/one-object.json]
+insert_final_newline = false
+
+[test/fixtures/one.jade]
+insert_final_newline = false
+
+[test/fixtures/one.styl]
+insert_final_newline = false
+
+[test/fixtures/read-config1.json]
+insert_final_newline = false
+
+[test/fixtures/read-config2.yaml]
+insert_final_newline = false
+
+[test/fixtures/read-config3.json]
+insert_final_newline = false
+
+[test/fixtures/read-config4.yaml]
+insert_final_newline = false
+
+[test/fixtures/read-config6.yml]
+insert_final_newline = false
+
+[test/fixtures/read-invalid.json]
+insert_final_newline = false
+
+[test/fixtures/result.one.html]
+insert_final_newline = false
+
+[test/fixtures/simple.jade]
+insert_final_newline = false
+
+[test/fixtures/specific.styl]
+insert_final_newline = false
+
+[test/mocha.opts]
+insert_final_newline = false
+
+[test/test.js]
+trim_trailing_whitespace = false
+
+[tsconfig.json]
+insert_final_newline = false
+
+[tslint.yaml]
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[types/best-globals/index.d.ts]
+insert_final_newline = false
