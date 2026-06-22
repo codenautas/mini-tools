@@ -6,8 +6,6 @@ import {promises as fs} from 'fs';
 import * as FS from 'fs';
 import * as jsYaml from 'js-yaml';
 
-import * as readYaml from 'read-yaml-promise';
-
 import * as bestGlobals from 'best-globals';
 import {changing} from 'best-globals';
 import {expected, unexpected} from 'cast-error';
@@ -27,6 +25,10 @@ export type TransformPromiseFromFileName = ((fileName:string)=> Promise<any>);
 
 export function readJson(p:string){
     return fs.readFile(p, 'utf8').then(c => JSON.parse(c))
+}
+
+export function readYaml(fileName:string):Promise<any>{
+    return fs.readFile(fileName, 'utf8').then(c => jsYaml.load(c))
 }
 
 /* tslint:disable:no-object-literal-type-assertion */

@@ -12,10 +12,11 @@ mini tools for express and others
 ![stable](https://img.shields.io/badge/stability-stable-blue.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
-[![build](https://github.com/codenautas/mini-tools/workflows/Node.js%20CI/badge.svg)](https://github.com/codenautas/mini-tools/actions?query=workflow%3A%22Node.js+CI%22)
+[![linux](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml)
 [![windows](https://ci.appveyor.com/api/projects/status/github/codenautas/mini-tools?svg=true)](https://ci.appveyor.com/project/codenautas/mini-tools)
 [![coverage](https://img.shields.io/coveralls/codenautas/mini-tools/master.svg)](https://coveralls.io/r/codenautas/mini-tools)
-[![outdated-deps](https://img.shields.io/github/issues-search/codenautas/mini-tools?color=9cf&label=outdated-deps&query=is%3Apr%20author%3Aapp%2Fdependabot%20is%3Aopen)](https://github.com/codenautas/mini-tools/pulls/app%2Fdependabot)
+[![security](https://socket.dev/api/badge/npm/package/mini-tools)](https://socket.dev/npm/package/mini-tools)
+[![qa-control](https://github.com/codenautas/mini-tools/actions/workflows/qa-control.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/qa-control.yml)
 
 <!--multilang buttons-->
 
