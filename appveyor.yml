@@ -1,16 +1,25 @@
-platform: x64
+image: Visual Studio 2022
+
 environment:
   matrix:
     - nodejs_version: "24"
-    - nodejs_version: "25"
+    - nodejs_version: "26"
+
 matrix:
   fast_finish: true
+
+cache:
+  - '%LOCALAPPDATA%\npm-cache -> package-lock.json'
+
 install:
-  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version)
+  - ps: Install-Product node $env:nodejs_version x64
   - npm ci
+
 build: off
+
 test_script:
   - node --version
   - npm --version
   - npm run test-ci
+
 version: "{build}"
