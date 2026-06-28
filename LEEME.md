@@ -9,7 +9,6 @@ mini tools for express and others
 [!--lang:*-->
 
 <!-- cucardas -->
-![stable](https://img.shields.io/badge/stability-stable-blue.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![linux](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml)
@@ -54,15 +53,15 @@ Have some mini tools for express and others
 
 <!--lang:es-->
 
-Retorna una función que envía un mensaje de error al cliente. 
+Retorna una función que envía un mensaje de error al cliente.
 Si el objeto error tiene especificada la propiedad:
 
-  * code: es mostrada antes del mensaje. 
+  * code: es mostrada antes del mensaje.
   * status: es enviado como status (si no se envía 400)
 
 <!--lang:en--]
 
-Returns a function that sends a error message to de front-end. 
+Returns a function that sends a error message to de front-end.
 If the error object has setted the property
 
   * code: is displayed before the message
@@ -75,7 +74,7 @@ app.post('/insert' , function(req,res){
   //...
   if(duplicate){
     serveErr(req,res)(new Error("Duplicate name. Can't insert"));
-    return; 
+    return;
   }
   //...
 ```
@@ -98,25 +97,25 @@ app.use('/tools', function(req,res,next){
       throw new Error("next");
     }
     // ...
-  }).catch(serveErr(req,res,next)); 
+  }).catch(serveErr(req,res,next));
 ```
 
 <!--lang:es-->
 
-*catch* espera un función que recibe un error. 
-*serveErr* devuelve esa función. 
+*catch* espera un función que recibe un error.
+*serveErr* devuelve esa función.
 
 Cuando err es Error("next") *serveErr* llama a next y no envía ningún mensaje al cliente
-(porque entiende que no es un error sino que debe capturarse en el siguiente middleware); 
-de otro modo envía un error 400 con el mensaje de error (parámetro de Error). 
+(porque entiende que no es un error sino que debe capturarse en el siguiente middleware);
+de otro modo envía un error 400 con el mensaje de error (parámetro de Error).
 
 <!--lang:en--]
 
-*catch* expects a function that receive an error. 
-*serveErr* returns that function. 
+*catch* expects a function that receive an error.
+*serveErr* returns that function.
 
-When err is Error("next") *serveErr* calls next and does not send any result to de front-end; 
-otherwise it sends a 400 error with the message and stack. 
+When err is Error("next") *serveErr* calls next and does not send any result to de front-end;
+otherwise it sends a 400 error with the message and stack.
 
 [!--lang:*-->
 
@@ -133,16 +132,16 @@ app.use('/main',MiniTools.serveJade('./static/index.jade',false));
 
 <!--lang:es-->
 
-Retorna un middleware compatible con express que envía y compila archivos jade/pug (con extensión *.jade*). 
+Retorna un middleware compatible con express que envía y compila archivos jade/pug (con extensión *.jade*).
 
 #### opciones
 
-Si el parámetro *opts* es un booleano se asume que es el valor de la opción *any*. 
+Si el parámetro *opts* es un booleano se asume que es el valor de la opción *any*.
 
 Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo *.jade* correspondiente;
-si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware.
 
-Si `any==false` lo que se especifica es un archivo específico. 
+Si `any==false` lo que se especifica es un archivo específico.
 
 Otras opciones especificadas en *opts* son pasadas a la función `pug.render`
 
@@ -150,14 +149,14 @@ Otras opciones especificadas en *opts* son pasadas a la función `pug.render`
 
 <!--lang:en--]
 
-Returns an express middleware to serve jade files. 
+Returns an express middleware to serve jade files.
 
-If *opts* is boolean it will be the *any* option. 
+If *opts* is boolean it will be the *any* option.
 
 If `any==true` it serves files adding .jade to req.path; and
-if there is no jade file it call `next()`. 
+if there is no jade file it call `next()`.
 
-If `any==false` it serves that specific file. 
+If `any==false` it serves that specific file.
 
 Others options in *opts* are pased to `pug.render` function.
 
@@ -178,21 +177,21 @@ app.use('/site.css',MiniTools.serveStylus('./static/index.styl',false));
 
 <!--lang:es-->
 
-Retorna un middleware compatible con express que envía y compila archivos jade. 
+Retorna un middleware compatible con express que envía y compila archivos jade.
 Si `any==true` acepta cualquier nombre (sin extensión) y busca si existe el archivo .jade correspondiente;
-si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware. 
+si no existe tal archivo llama a `next()` para que continúe con el siguiente middleware.
 
-Si `any==false` lo que se especifica es un archivo específico. 
+Si `any==false` lo que se especifica es un archivo específico.
 
 **Nota**: hay que agregar `"stylus"` a `package.json`
 
 <!--lang:en--]
 
-Returns an express middleware to serve jade files. 
+Returns an express middleware to serve jade files.
 If `any==true` it serves files adding .jade to req.path; and
-if there is no jade file it call `next()`. 
+if there is no jade file it call `next()`.
 
-If `any==false` it serves that specific file. 
+If `any==false` it serves that specific file.
 
 **Note**: for use serveStylus you must include stylus in package.json
 
@@ -211,12 +210,12 @@ app.use('/is-up-service',MiniTools.serveText('Yes.'));
 
 <!--lang:es-->
 
-Retorna un middleware compatible con express que envía un archivo de texto plano. 
+Retorna un middleware compatible con express que envía un archivo de texto plano.
 Opcionalmente se le puede indicar el "content type" (si no se le pasa una "/" se entiende que es text)
 
 <!--lang:en--]
 
-Returns an express middleware to serve pain text. 
+Returns an express middleware to serve pain text.
 Optionaly you can pass "content type".
 
 [!--lang:*-->
@@ -255,7 +254,7 @@ app.use('/config',MiniTools.serveYaml(config));
 
 <!--lang:es-->
 
-Retorna un middleware compatible con express que envía un objeto en formato yaml 
+Retorna un middleware compatible con express que envía un objeto en formato yaml
 (usando [js-yaml](https:www.npmjs.com/package/js-yaml)).
 
 <!--lang:en--]
@@ -283,15 +282,15 @@ MiniTools.readConfig(
 
 <!--lang:es-->
 
-Lee la configuración de la lista empezando por el primer archivo 
-y agregando la configuración de los siguientes archivos 
-(usando [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options)). 
+Lee la configuración de la lista empezando por el primer archivo
+y agregando la configuración de los siguientes archivos
+(usando [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options)).
 
-Si el elemento de la lista es un nombre de archivo terminado en .json .yaml o .yml se lee y se parsea, 
+Si el elemento de la lista es un nombre de archivo terminado en .json .yaml o .yml se lee y se parsea,
 si no tiene extensión se busca uno con alguna de esas extensiones,
 si es un objeto plano se usa directamente.
 
-**opciones** 
+**opciones**
  * whenNotExist:'ignore'
  * whenNotExist:'fail'
 
@@ -299,11 +298,11 @@ si es un objeto plano se usa directamente.
 
 Reads the chain of configuration merging with [best-globals.changing](https://www.npmjs.com/package/best-globals#changingoriginalconfig-changes-options).
 
-If the list element is a fileName ending with .json .yaml o .yml, it reads and parse, 
-if doesn't have extension it search first, 
+If the list element is a fileName ending with .json .yaml o .yml, it reads and parse,
+if doesn't have extension it search first,
 if it is a plain object it uses directly.
 
-**options** 
+**options**
  * whenNotExist:'ignore'
  * whenNotExist:'fail'
 
@@ -318,4 +317,3 @@ if it is a plain object it uses directly.
 [!--lang:*-->
 
 [MIT](LICENSE)
-

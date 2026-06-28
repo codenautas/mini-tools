@@ -2,7 +2,6 @@
 mini tools for express and others
 
 
-![stable](https://img.shields.io/badge/stability-stable-blue.svg)
 [![npm-version](https://img.shields.io/npm/v/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![downloads](https://img.shields.io/npm/dm/mini-tools.svg)](https://npmjs.org/package/mini-tools)
 [![linux](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml)
@@ -199,4 +198,3 @@ if it is a plain object it uses directly.
 
 
 [MIT](LICENSE)
-
