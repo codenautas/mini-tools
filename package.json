@@ -1,7 +1,7 @@
 {
   "name": "mini-tools",
   "description": "mini tools for express and others",
-  "version": "1.13.8",
+  "version": "1.13.9",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "files": [
@@ -17,7 +17,9 @@
   "overrides": {
     "diff": ">=8.0.2",
     "serialize-javascript": ">=7.0.0",
-    "stylus": { "glob": "^11" },
+    "stylus": {
+      "glob": "^11"
+    },
     "uuid": ">=14.0.0"
   },
   "dependencies": {
