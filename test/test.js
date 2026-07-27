@@ -145,6 +145,23 @@ describe('mini-tools with mocks', function(){
             st(null, res);
         });
     });
+    describe("serve-image", function(){
+        it("serve image buffer with the given headers",function(done){
+            var fileName='test/fixtures/ok.png';
+            fs.readFile(fileName).then(function(fileContent){
+                var si=MiniTools.serveImage(fileContent,[['Content-Type', 'image/png']]);
+                var res={};
+                res.setHeader=sinon.spy();
+                res.end=function(buf){
+                    expect(res.setHeader.firstCall.args).to.eql(['Content-Type', 'image/png']);
+                    expect(res.setHeader.secondCall.args).to.eql(['Content-Length', fileContent.length]);
+                    expect(buf).to.eql(fileContent);
+                    done();
+                };
+                si(null, res);
+            }).catch(done);
+        });
+    });
     describe("stylus and jade", function(){
         function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done, expectNext){
             try{
@@ -247,6 +264,30 @@ describe('mini-tools with mocks', function(){
                 stub_render.restore();
                 stub_serveText.restore();
                 done();
+            };
+            ssAny(req, res, next);
+        });
+        it("serve Error if reading the file fails with a non ENOENT error", function(done){
+            var req={path:'unreadable.css'};
+            var stub_exists=sinon.stub(FS,"exists");
+            var ErrorEACCES = new Error("EACCES: permission denied");
+            ErrorEACCES.code = 'EACCES';
+            stub_exists.throws(ErrorEACCES);
+            var spy_console_log=sinon.stub(console, "log");
+            var res={};
+            res.writeHead=sinon.spy();
+            Object.defineProperty(res,'headersSent',{get: sinon.stub().returns(false)});
+            res.end=function(body){
+                spy_console_log.restore();
+                stub_exists.restore();
+                expect(res.writeHead.firstCall.args[0]).to.be(400);
+                expect(body).to.match(/EACCES: permission denied/);
+                done();
+            };
+            var next=function(err){
+                spy_console_log.restore();
+                stub_exists.restore();
+                done(err||new Error('no debia llamar a next()'));
             };
             ssAny(req, res, next);
         });

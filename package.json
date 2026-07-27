@@ -36,11 +36,11 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^26.1.1",
     "@types/send": "^1.2.1",
-    "c8": "^12.0.0",
     "colors": "^1.4.0",
     "expect.js": "^0.3.1",
     "express": "^5.2.1",
     "mocha": "^12.0.0-rc.5",
+    "nyc": "^18.0.0",
     "qa-control": "^0.8.1",
     "sinon": "^22.1.0",
     "source-map-support": "^0.5.21",
@@ -56,14 +56,14 @@
   "scripts": {
     "prepare": "tsc",
     "test": "mocha --reporter spec --bail --check-leaks --exit test/",
-    "test-ci": "c8 --reporter=text-summary --reporter=lcov mocha --exit --check-leaks test/",
-    "test-cov": "c8 mocha --exit test/",
+    "test-ci": "nyc --reporter=text-summary --reporter=lcov mocha --exit --check-leaks test/",
+    "test-cov": "nyc mocha --exit test/",
     "start": "node example/server.js"
   },
-  "c8": {
+  "nyc": {
     "extension": [
-      ".js",
-      ".ts"
+      ".ts",
+      ".tsx"
     ],
     "exclude": [
       "**/*.d.ts",
@@ -72,7 +72,7 @@
       "test"
     ],
     "include": [
-      "lib/**"
+      "**"
     ],
     "reporter": [
       "html",
@@ -89,6 +89,6 @@
     "test-appveyor": true,
     "type": "lib",
     "stage": "designing",
-    "coverage": 80
+    "coverage": 95
   }
 }
