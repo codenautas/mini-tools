@@ -23,9 +23,9 @@
     "uuid": ">=14.0.0"
   },
   "dependencies": {
-    "best-globals": "^2.2.2",
+    "best-globals": "^2.2.3",
     "cast-error": "^0.1.5",
-    "js-yaml": "^5.2.2",
+    "js-yaml": "^5.4.3",
     "pug": "^3.0.4",
     "send": "^1.2.1",
     "stylus": "^0.64.0"
@@ -34,15 +34,15 @@
     "@types/express": "^5.0.6",
     "@types/js-yaml": "^4.0.9",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^26.1.1",
+    "@types/node": "^26.6.5",
     "@types/send": "^1.2.1",
     "expect.js": "^0.3.1",
-    "express": "^5.2.1",
-    "mocha": "^12.0.0-rc.5",
+    "express": "^5.3.0",
+    "mocha": "^12.0.3",
     "nyc": "^18.0.0",
-    "qa-control": "^0.8.1",
+    "qa-control": "^0.12.2",
     "sinon": "^22.1.0",
-    "supertest": "^7.2.2",
+    "supertest": "^7.3.1",
     "typescript": "^5.9.3"
   },
   "main": "lib/mini-tools.js",
@@ -81,11 +81,9 @@
   "qa-control": {
     "profile": "minimum",
     "gha": true,
-    "package-version": "0.3.0",
     "run-in": "server",
     "test-appveyor": true,
     "type": "lib",
-    "stage": "designing",
     "coverage": 95
   }
 }
