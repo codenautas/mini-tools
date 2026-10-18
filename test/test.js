@@ -2,7 +2,6 @@
 /*jshint eqnull:true */
 /*jshint globalstrict:true */
 /*jshint node:true */
-/*eslint-env node*/
 /* global describe */
 /* global it */
 
@@ -130,7 +129,7 @@ describe('mini-tools with mocks', function(){
             expect(preEval("max(f(a))+12*45+a+8/(3/4!)-f(x)",{a:true, x:true},{f:true,max:true})).to.be(true);
         });
     });
-    
+
     describe("serve-text", function(){
         it("serve utf8-normal text",function(done){
             var st=MiniTools.serveText("¡normal!");
@@ -169,7 +168,7 @@ describe('mini-tools with mocks', function(){
                     renderizer={baseObject:renderizer, methodName:"render"};
                 }
                 var res={
-                    setHeader:function(){}, 
+                    setHeader:function(){},
                     end:function(sendendContent){
                         Promise.resolve().then(function(){
                             return fs.readFile(fileNameToRead, {encoding:'utf8'});
@@ -389,14 +388,14 @@ describe("fs tools", function(){
                 config6:6,
             });
             expect(bestGlobals.changing.callCount).to.be(6);
-            expect(bestGlobals.changing.args[bestGlobals.changing.args.length-1]).to.eql([      
+            expect(bestGlobals.changing.args[bestGlobals.changing.args.length-1]).to.eql([
                 { config1: 1,
                   config2: 2.5,
                   config3: 3,
                   config4: 4,
                   config5: 5,
                   config6: 6.5 },
-                { config6: 6 } 
+                { config6: 6 }
             ]);
             bestGlobals.changing.restore();
         }).then(done,done);

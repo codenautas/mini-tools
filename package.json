@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "best-globals": "^2.2.3",
-    "cast-error": "^0.1.5",
-    "js-yaml": "^5.4.3",
+    "cast-error": "^0.1.6",
+    "js-yaml": "^5.5.0",
     "pug": "^3.0.4",
     "send": "^1.2.1",
     "stylus": "^0.64.0"
@@ -79,7 +79,6 @@
     "all": true
   },
   "qa-control": {
-    "profile": "minimum",
     "gha": true,
     "run-in": "server",
     "test-appveyor": true,
