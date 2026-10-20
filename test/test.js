@@ -11,8 +11,8 @@ var pug = require('pug');
 var stylus = require('stylus');
 var MiniTools = require('..');
 var bestGlobals = require('best-globals');
-var fs = require('fs').promises;
-var FS = require('fs');
+var fs = require('node:fs').promises;
+var FS = require('node:fs');
 
 var jsYaml = require('js-yaml');
 
@@ -20,7 +20,6 @@ var ERROR_LOGS = false
 
 describe('mini-tools with mocks', function(){
     describe('serveErr', function(){
-        var server;
         it('should send ERR 400 with stack', function(){
             var res={};
             res.end=sinon.spy();
@@ -162,7 +161,7 @@ describe('mini-tools with mocks', function(){
         });
     });
     describe("stylus and jade", function(){
-        function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done, expectNext){
+        function testServe(req, any, fileNameToRead, serviceName, renderizer, textType, baseDir, done, expectNext){ // eslint-disable-line max-params
             try{
                 if(!renderizer.baseObject){
                     renderizer={baseObject:renderizer, methodName:"render"};
@@ -369,8 +368,7 @@ describe("mini-tools with fake server",function(){
 
 describe("fs tools", function(){
     it("must read multiple config", function(done){
-        var ok="ok_content_"+Math.random();
-        var bg=sinon.spy(bestGlobals, "changing");
+        sinon.spy(bestGlobals, "changing");
         MiniTools.readConfig([
             'test/fixtures/read-config1.json',
             'test/fixtures/read-config2.yaml',

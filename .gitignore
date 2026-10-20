@@ -34,3 +34,6 @@ local-*
 .nyc_output
 
 *.bak
+
+.claude/
+.fuse_hidden*
