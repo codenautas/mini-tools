@@ -7,17 +7,23 @@
 
 var express = require('express');
 var app = express();
+app.disable('x-powered-by');
+app.use(express.urlencoded({extended:true}));
 var MiniTools = require('..');
+var escapeHtml = require('escape-html');
+
+// only the query and some well known headers are logged: the body and the cookies can contain secrets
+// JSON.stringify escapes the line feeds, so the values cannot forge log lines
+var LOGGED_HEADERS = ['host', 'user-agent', 'accept', 'accept-language', 'content-type', 'content-length'];
 
 app.use(function(req,res,next){
-    console.log('***************************');
-    console.dir(req,{depth:0});
-    console.log('req.cookies',req.cookies);
-    console.log('req.query  ',req.query  );
-    console.log('req.body   ',req.body   );
-    console.log('req.params ',req.params );
-    console.log('req.headers',req.headers);
-    // console.dir(res,{depth:0});
+    var headers = {};
+    LOGGED_HEADERS.forEach(function(name){
+        if(name in req.headers){
+            headers[name] = req.headers[name];
+        }
+    });
+    console.log('request', JSON.stringify({method:req.method, path:req.path, query:req.query, headers:headers}));
     next();
 });
 
@@ -58,11 +64,11 @@ Promise.resolve().then(function(){
         }else{
             params=req.query;
         }
-        var result=params.alfa+params.beta;
+        var result=(Number(params.alfa)+Number(params.beta)).toString();
         if(req.method==='POST'){
-            res.send(result);
+            res.type('text/plain').send(result);
         }else{
-            res.send('<h1>la suma es '+result+'<h1>');
+            res.send('<h1>la suma es '+escapeHtml(result)+'</h1>');
         }
     });
 }).catch(function(err){
