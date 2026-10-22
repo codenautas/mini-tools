@@ -23,7 +23,7 @@ app.use(function(req,res,next){
             headers[name] = req.headers[name];
         }
     });
-    console.log('request', JSON.stringify({method:req.method, path:req.path, query:req.query, headers:headers}));
+    console.log('request', {method:req.method, path:req.path, query:req.query, headers:headers});
     next();
 });
 
