@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "best-globals": "^2.2.3",
-    "cast-error": "^0.1.6",
+    "cast-error": "^0.1.7",
     "js-yaml": "^5.5.0",
     "pug": "^3.0.4",
     "send": "^1.2.1",
