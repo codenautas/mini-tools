@@ -38,12 +38,12 @@
     "@types/send": "^1.2.1",
     "escape-html": "^1.0.3",
     "eslint-plugin-sonarjs": "^4.2.2",
-    "eslint-plugin-unicorn": "^78.0.0",
+    "eslint-plugin-unicorn": "^79.0.0",
     "expect.js": "^0.3.1",
     "express": "^5.3.0",
     "mocha": "^12.0.3",
     "nyc": "^18.0.0",
-    "qa-control": "^0.14.1",
+    "qa-control": "^0.14.2",
     "sinon": "^22.1.0",
     "supertest": "^7.3.1",
     "typescript": "^5.9.3",
@@ -87,6 +87,7 @@
     "run-in": "server",
     "test-appveyor": true,
     "type": "lib",
-    "coverage": 95
+    "coverage": 95,
+    "sonar": true
   }
 }

@@ -7,6 +7,7 @@ mini tools for express and others
 [![linux](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/build-and-test.yml)
 [![windows](https://ci.appveyor.com/api/projects/status/github/codenautas/mini-tools?svg=true)](https://ci.appveyor.com/project/codenautas/mini-tools)
 [![coverage](https://img.shields.io/coveralls/codenautas/mini-tools/master.svg)](https://coveralls.io/r/codenautas/mini-tools)
+[![sonar](https://sonarcloud.io/api/project_badges/measure?project=codenautas_mini-tools&metric=alert_status)](https://sonarcloud.io/summary/overall?id=codenautas_mini-tools)
 [![qa-control](https://github.com/codenautas/mini-tools/actions/workflows/qa-control.yml/badge.svg)](https://github.com/codenautas/mini-tools/actions/workflows/qa-control.yml)
 
 
